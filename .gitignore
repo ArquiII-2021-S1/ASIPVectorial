@@ -9,3 +9,5 @@ output_files/
 simulation/
 
 *.rpt
+
+*.bak
