@@ -8,12 +8,12 @@ module WriteModule(clk, rst, op_type, vector_data, scalar_data, base_address, wr
 	/* Input signals */
 	input logic clk, op_type, rst;
 	input logic [A-1:0] base_address;
-	input logic [L-1:0][I-1:0] vector_data;
-	input logic [I-1:0] scalar_data;
+	input logic [I-1:0][L-1:0] vector_data;
+	input logic [L-1:0] scalar_data;
 	
 	/* Output signals */
 	output logic [A-1:0] write_address;
-	output logic [I-1:0] write_data;
+	output logic [L-1:0] write_data;
 	
 	/* Internal signals */
 	logic [A-1:0] counter;
