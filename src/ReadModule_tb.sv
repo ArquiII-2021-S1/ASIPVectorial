@@ -21,8 +21,8 @@ module ReadModule_tb();
 	);
 	
 	initial begin
-		clk = 0;
-		rst = 1;
+		clk = 0; 
+		rst = 1; 
 		
 		base_address = 6'd34;
 		
