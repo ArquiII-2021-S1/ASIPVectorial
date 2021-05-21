@@ -1,4 +1,21 @@
-module MemStage(clk, rst, op_type, op_source, address, aluResultV, rd2_vec, aluResultS, rd2_sca, write_enable, scalar_output, vector_output, mem_finished);
+module MemStage(clk, rst, op_type, op_source, address, aluResultV, rd2_vec, aluResultS, 
+					 rd2_sca, write_enable, scalar_output, vector_output, mem_finished, mem_data);
+	/* Arguments
+	- clk:            system clock
+	- rst:            reset signal
+	- op_type:        indicates if the operation is scalar or vectorial
+	- op_source:      indicates if the writing source should be the ALU or the registers
+	- address:        reading/writing address
+	- aluResultV:     ALU Result from the vectorial operation
+	- rd2_vec:        vectorial register output from RegisterFile
+	- aluResultS:     ALU Result from the scalar operation
+	- rd2_sca:        scalar register output from RegisterFile
+	- write_enable:   indicates if the memory should write or only read
+	- scalar_output:  scalar reading result
+	- vector_output:  vector reading result
+	- mem_finished:   indicates if the reading/writing operation finished
+	- mem_data:       output of the memory RAM
+	*/
 	
 	/* Parameters */
 	parameter I = 20;  // Number of items in the vector
@@ -13,7 +30,7 @@ module MemStage(clk, rst, op_type, op_source, address, aluResultV, rd2_vec, aluR
 	
 	/* Output signals */
 	output logic [I-1:0][L-1:0] vector_output;
-	output logic [L-1:0] scalar_output;
+	output logic [L-1:0] scalar_output, mem_data;
 	output logic mem_finished;
 	
 	/* ----------------------------------------------------------------------- */
@@ -66,10 +83,26 @@ module MemStage(clk, rst, op_type, op_source, address, aluResultV, rd2_vec, aluR
 	
 	// Write enable
 	logic wrEnable;
-	assign weEnable = ~wrFinished && write_enable;
+	assign wrEnable = ~wrFinished && write_enable;
 	
+	// Mem address mux
+	logic [A-1:0] mem_address;
+	assign mem_address = write_enable ? write_address : read_address;
 	
+	RAM memory(
+		.address(mem_address),
+		.clock(clk),
+		.data(write_data),
+		.wren(wrEnable),
+		.q(read_data)
+	);
 	
+	/* ----------------------------------------------------------------------- */
+	
+	// Finish read/write signal
 	assign mem_finished = (~write_enable && rdFinished) || (write_enable && wrFinished);
+	
+	// Output data from the memory
+	assign mem_data = read_data;
 	
 endmodule 
