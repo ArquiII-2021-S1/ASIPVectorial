@@ -70,6 +70,6 @@ module MemStage(clk, rst, op_type, op_source, address, aluResultV, rd2_vec, aluR
 	
 	
 	
-	assign mem_finished = (~write_enable && rdFinished) || (write_enable && wrFinished)
+	assign mem_finished = (~write_enable && rdFinished) || (write_enable && wrFinished);
 	
 endmodule 
