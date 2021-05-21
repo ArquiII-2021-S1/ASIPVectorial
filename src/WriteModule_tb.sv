@@ -1,6 +1,6 @@
 module WriteModule_tb();
 
-	logic clk, op_type, rst;
+	logic clk, op_type, rst, finished;
 	logic [5:0] base_address;
 	logic [19:0][9:0] vector_data;
 	logic [9:0] scalar_data;
@@ -17,7 +17,8 @@ module WriteModule_tb();
 		.scalar_data(scalar_data),
 		.base_address(base_address), 
 		.write_data(write_data), 
-		.write_address(write_address)
+		.write_address(write_address),
+		.finished(finished)
 	);
 	
 

@@ -1,4 +1,4 @@
-module ReadModule(clk, rst, base_address, read_data, read_address, scalar_data, vector_data);
+module ReadModule(clk, rst, op_type, base_address, read_data, read_address, scalar_data, vector_data, finished);
 	
 	/* Parameters */
 	parameter I = 20;  // Number of items in the vector
@@ -6,7 +6,7 @@ module ReadModule(clk, rst, base_address, read_data, read_address, scalar_data, 
 	parameter A = 6;   // Address length
 	
 	/* Input signals */
-	input logic clk, rst;
+	input logic clk, rst, op_type;
 	input logic [A-1:0] base_address;
 	input logic [L-1:0] read_data;
 	
@@ -14,9 +14,11 @@ module ReadModule(clk, rst, base_address, read_data, read_address, scalar_data, 
 	output logic [A-1:0] read_address;
 	output logic [L-1:0] scalar_data;
 	output logic [I-1:0][L-1:0] vector_data;
+	output logic finished;
 	
 	initial begin
 		vector_data <= 0;
+		finished <= 0;
 	end
 	
 	/* Internal signals */
@@ -56,5 +58,7 @@ module ReadModule(clk, rst, base_address, read_data, read_address, scalar_data, 
 	
 	assign scalar_data = vector_data[0];
 
+	// Finished signal
+	FinishedSignal #(A) finish(clk, rst, op_type, counter, finished);
 
 endmodule 

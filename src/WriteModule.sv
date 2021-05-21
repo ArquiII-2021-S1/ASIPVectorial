@@ -1,4 +1,4 @@
-module WriteModule(clk, rst, op_type, vector_data, scalar_data, base_address, write_data, write_address);
+module WriteModule(clk, rst, op_type, vector_data, scalar_data, base_address, write_data, write_address, finished);
 	
 	/* Parameters */
 	parameter I = 20;  // Number of items in the vector
@@ -14,6 +14,7 @@ module WriteModule(clk, rst, op_type, vector_data, scalar_data, base_address, wr
 	/* Output signals */
 	output logic [A-1:0] write_address;
 	output logic [L-1:0] write_data;
+	output finished;
 	
 	/* Internal signals */
 	logic [A-1:0] counter;
@@ -35,4 +36,7 @@ module WriteModule(clk, rst, op_type, vector_data, scalar_data, base_address, wr
 	// Selection between vector write address and scalar write address
 	assign write_address = op_type ? v_address : base_address; 
 
+	// Finished signal
+	FinishedSignal #(A) finish(clk, rst, op_type, counter, finished);
+	
 endmodule 

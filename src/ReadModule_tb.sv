@@ -1,7 +1,7 @@
 module ReadModule_tb();
 	
 	/* Input signals */
-	logic clk, rst;
+	logic clk, rst, op_type;
 	logic [5:0] base_address;
 	logic [9:0] read_data;
 	
@@ -13,6 +13,7 @@ module ReadModule_tb();
 	ReadModule #(20, 10, 6) rdModule(
 		.clk(clk), 
 		.rst(rst), 
+		.op_type(op_type),
 		.base_address(base_address), 
 		.read_data(read_data), 
 		.read_address(read_address), 
@@ -21,6 +22,7 @@ module ReadModule_tb();
 	);
 	
 	initial begin
+		op_type = 0;
 		clk = 0; 
 		rst = 1; 
 		
@@ -35,6 +37,7 @@ module ReadModule_tb();
 		assert(scalar_data === read_data) else $error("Case 1: scalar_data failed");
 		
 		// Case 2: reading second position of the array
+		op_type = 1'd1;
 		read_data = 10'd901;
 		#10;
 		assert(read_address === base_address+6'd1) else $error("Case 2: read_address failed");
