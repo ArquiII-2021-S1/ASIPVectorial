@@ -6,11 +6,11 @@ module ForkVector #(parameter N = 32, V=20)(
 						input logic 	[V-1:0][N-1:0] RD2_VEC_i,
 						input logic 	[N-1:0] Scalar_i,
 						output logic 	[4-1:0][N-1:0] Vec_A_o,
-						output logic 	[4-1:0][N-1:0] Vec_B_o
+						output logic 	[4-1:0][N-1:0] Vec_B_o,
+						output integer counter=0
 						);
 
 
-integer counter=0;
 
 assign Vec_A_o[0] = RD1_VEC_i[counter];
 assign Vec_A_o[1] = RD1_VEC_i[5+counter];

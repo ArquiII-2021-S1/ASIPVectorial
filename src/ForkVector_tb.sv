@@ -8,7 +8,7 @@ logic [V-1:0][N-1:0] RD2_VEC_i;
 logic [N-1:0] Scalar_i;
 logic [4-1:0][N-1:0] Vec_A_o;
 logic [4-1:0][N-1:0] Vec_B_o;
-						
+integer counter;				
 ForkVector #(.N(N), .V(V)) DUT(.*);
 
 
