@@ -20,7 +20,7 @@ module MemStage(clk, rst, op_type, op_source, address, aluResultV, rd2_vec, aluR
 	/* Parameters */
 	parameter I = 20;  // Number of items in the vector
 	parameter L = 8;   // Item length 
-	parameter A = 16;  // Address length
+	parameter A = 32;  // Address length
 	
 	/* Input signals */
 	input logic clk, rst, op_type, op_source, write_enable;
@@ -83,12 +83,12 @@ module MemStage(clk, rst, op_type, op_source, address, aluResultV, rd2_vec, aluR
 		.finished(wrFinished)
 	);
 	
-	RAM memory(
+	Memory #(A,L) memory(
+		.clk(~clk),
 		.address(mem_address),
-		.clock(~clk),
-		.data(write_data),
-		.wren(wrEnable),
-		.q(read_data)
+		.write_data(write_data),
+		.write_enable(wrEnable),
+		.read_data(read_data)
 	);
 	
 	ReadModule #(I,L,A) readModule(

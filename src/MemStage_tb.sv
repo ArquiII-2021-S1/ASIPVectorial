@@ -3,7 +3,7 @@
 module MemStage_tb();
 	/* Input signals */
 	logic clk, rst, op_type, op_source, write_enable;
-	logic [15:0] address; 
+	logic [31:0] address; 
 	logic [19:0][7:0] aluResultV, rd2_vec;
 	logic [7:0] aluResultS, rd2_sca;
 	
@@ -34,7 +34,7 @@ module MemStage_tb();
 		rst = 1;
 		op_type = 0;
 		write_enable = 0;
-		address = 0;
+		address = 32'hFFFF;
 		op_source = 0;
 		
 		// Scalar data
@@ -89,11 +89,18 @@ module MemStage_tb();
 		
 		rst = 0;
 		op_source = 1'd0; // Register data
-		op_type = 1'd0; // Scalar data 
+		op_type = 1'd1; // Vector data 
 		write_enable = 1'd1;
 		#250
-		address = 16'd0;
+		address = 16'd20;
+		//address = 32'hFFFF;
 		write_enable = 1'd0;
+		rst=1;
+		#10;
+		rst = 0;
+		
+		#250
+		address = 32'hFFFF;
 		rst=1;
 		#10;
 		rst = 0;
