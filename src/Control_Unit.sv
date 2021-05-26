@@ -1,5 +1,6 @@
 module Control_Unit(input 	logic[3:0] OpCode,
-						  output logic RegFileWE, ExtendSelect, ALUSource, MemWE, WBSelect,				  
+						  input  logic Mem_Finished, Exe_Finished,
+						  output logic RegFileWE, ExtendSelect, ALUSource, MemWE, WBSelect, Finished,				  
 						  output logic[1:0] BranchSelect, OpType, ALUControl);
 	
 	// OpCode: codigo de operacion de la instruccion.
@@ -42,6 +43,7 @@ module Control_Unit(input 	logic[3:0] OpCode,
 	assign ALUControl = OUT[3:2];
 	assign MemWE = OUT[1];
 	assign WBSelect = OUT[0];
+	assign Finished = Mem_Finished & Exe_Finished;
 			
 
 endmodule						  
