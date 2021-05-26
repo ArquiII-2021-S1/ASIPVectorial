@@ -19,8 +19,8 @@ module MemStage(clk, rst, op_type, op_source, address, aluResultV, rd2_vec, aluR
 	
 	/* Parameters */
 	parameter I = 20;  // Number of items in the vector
-	parameter L = 8;  // Item length 
-	parameter A = 6;   // Address length
+	parameter L = 8;   // Item length 
+	parameter A = 16;  // Address length
 	
 	/* Input signals */
 	input logic clk, rst, op_type, op_source, write_enable;
@@ -46,17 +46,6 @@ module MemStage(clk, rst, op_type, op_source, address, aluResultV, rd2_vec, aluR
 	assign wrSourceVec = op_source ? aluResultV : rd2_vec;
 	assign wrSourceSca = op_source ? aluResultS : rd2_sca;
 	
-	WriteModule #(I,L,A) wrModule(
-		.clk(clk), 
-		.rst(rst), 
-		.op_type(op_type), 
-		.vector_data(wrSourceVec), 
-		.scalar_data(wrSourceSca), 
-		.base_address(address), 
-		.write_data(write_data), 
-		.write_address(write_address), 
-		.finished(wrFinished)
-	);
 	
 	/* ----------------------------------------------------------------------- */
 	
@@ -64,17 +53,6 @@ module MemStage(clk, rst, op_type, op_source, address, aluResultV, rd2_vec, aluR
 	logic [A-1:0] read_address; 
 	logic rdFinished;
 	
-	ReadModule #(I,L,A) readModule(
-		.clk(clk), 
-		.rst(rst), 
-		.op_type(op_type), 
-		.base_address(address), 
-		.read_data(read_data), 
-		.read_address(read_address), 
-		.scalar_data(scalar_output), 
-		.vector_data(vector_output), 
-		.finished(rdFinished)
-	);
 	
 	/* ----------------------------------------------------------------------- */
 	
@@ -88,6 +66,22 @@ module MemStage(clk, rst, op_type, op_source, address, aluResultV, rd2_vec, aluR
 	// Mem address mux
 	logic [A-1:0] mem_address;
 	assign mem_address = write_enable ? write_address : read_address;
+
+	
+	/* ----------------------------------------------------------------------- */
+	
+	
+	WriteModule #(I,L,A) wrModule(
+		.clk(clk), 
+		.rst(rst), 
+		.op_type(op_type), 
+		.vector_data(wrSourceVec), 
+		.scalar_data(wrSourceSca), 
+		.base_address(address), 
+		.write_data(write_data), 
+		.write_address(write_address), 
+		.finished(wrFinished)
+	);
 	
 	RAM memory(
 		.address(mem_address),
@@ -95,6 +89,18 @@ module MemStage(clk, rst, op_type, op_source, address, aluResultV, rd2_vec, aluR
 		.data(write_data),
 		.wren(wrEnable),
 		.q(read_data)
+	);
+	
+	ReadModule #(I,L,A) readModule(
+		.clk(clk), 
+		.rst(rst), 
+		.op_type(op_type), 
+		.base_address(address), 
+		.read_data(read_data), 
+		.read_address(read_address), 
+		.scalar_data(scalar_output), 
+		.vector_data(vector_output), 
+		.finished(rdFinished)
 	);
 	
 	/* ----------------------------------------------------------------------- */

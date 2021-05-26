@@ -6,7 +6,7 @@ module VectorItemExtractor(vector, address, item);
 	/* Input signals */
 	input logic [4:0] address;
 	input logic [I-1:0][L-1:0] vector;
-	output logic [I-1:0] item;
+	output logic [L-1:0] item;
 
 	logic [L-1:0] out;
 	
