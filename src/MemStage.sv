@@ -85,7 +85,7 @@ module MemStage(clk, rst, op_type, op_source, address, aluResultV, rd2_vec, aluR
 	
 	RAM memory(
 		.address(mem_address),
-		.clock(clk),
+		.clock(~clk),
 		.data(write_data),
 		.wren(wrEnable),
 		.q(read_data)

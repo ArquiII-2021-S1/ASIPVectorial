@@ -37,6 +37,12 @@ module WriteModule(clk, rst, op_type, vector_data, scalar_data, base_address, wr
 	assign write_address = op_type ? v_address : base_address; 
 
 	// Finished signal
-	FinishedSignal #(A) finish(clk, rst, op_type, counter, finished);
+	FinishedSignal #(A) finish(
+		.clk(clk), 
+		.rst(rst),
+		.vector_max(6'd19),
+		.op_type(op_type), 
+		.counter(counter), 
+		.finished(finished));
 	
 endmodule 

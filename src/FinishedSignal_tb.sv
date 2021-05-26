@@ -10,6 +10,7 @@ module FinishedSignal_tb();
 	FinishedSignal #(6) finishedSignal(
 		.clk(clk), 
 		.rst(rst), 
+		.vector_max(6'd19),
 		.op_type(op_type), 
 		.counter(counter), 
 		.finished(finished)

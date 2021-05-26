@@ -1,4 +1,4 @@
-module FinishedSignal(clk, rst, op_type, counter, finished);
+module FinishedSignal(clk, rst, vector_max, op_type, counter, finished);
 	
 	/* Parameters */
 	parameter N = 6;  // Address length
@@ -6,6 +6,7 @@ module FinishedSignal(clk, rst, op_type, counter, finished);
 	/* Input signals */
 	input logic clk, rst, op_type;
 	input logic [N-1:0] counter;
+	input logic [N-1:0] vector_max;
 	
 	/* Output signals */
 	output logic finished;
@@ -15,7 +16,7 @@ module FinishedSignal(clk, rst, op_type, counter, finished);
 	end
 	
 	logic A, B;
-	assign A = counter === 6'd20;
+	assign A = counter === vector_max;
 	assign B = counter === 6'd1;
 	
 	logic trigger;

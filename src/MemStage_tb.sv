@@ -30,16 +30,18 @@ module MemStage_tb();
 	);
 
 	initial begin
-		clk = 0;
+		clk = 1;
 		rst = 1;
 		op_type = 0;
 		write_enable = 0;
 		address = 0;
 		op_source = 0;
-		aluResultS = 0;
-		rd2_sca = 0;
 		
+		// Scalar data
+		aluResultS = 8'd40;
+		rd2_sca = 8'd25;
 		
+		// Vector data
 		aluResultV[0]  = 8'd50;
 		aluResultV[1]  = 8'd51;
 		aluResultV[2]  = 8'd52;
@@ -61,7 +63,7 @@ module MemStage_tb();
 		aluResultV[18] = 8'd68;
 		aluResultV[19] = 8'd69;
 		
-		
+		// Vector data
 		rd2_vec[0]  = 8'd100;
 		rd2_vec[1]  = 8'd101;
 		rd2_vec[2]  = 8'd102;
@@ -82,14 +84,20 @@ module MemStage_tb();
 		rd2_vec[17] = 8'd117;
 		rd2_vec[18] = 8'd118;
 		rd2_vec[19] = 8'd119;
-		#10
+		#10;
 
 		
 		rst = 0;
+		op_source = 1'd0; // Register data
+		op_type = 1'd0; // Scalar data 
+		write_enable = 1'd1;
+		#250
+		address = 16'd0;
+		write_enable = 1'd0;
+		rst=1;
+		#10;
+		rst = 0;
 		
-	
-	
-	
 	end
 	
 	always
