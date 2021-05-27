@@ -143,10 +143,10 @@ def enconde_instr(opname, reg_dest, reg_src, reg, imm):
     # Get the binary equivalent for the immediate
     if imm != None: instr_imm = decimalToBinary(imm, 16)
 
-    instr = instr_opcode + " " +\
-            instr_reg_dest + " " + \
-            instr_reg_src + " " + \
-            instr_reg + " " + \
+    instr = instr_opcode + \
+            instr_reg_dest + \
+            instr_reg_src + \
+            instr_reg + \
             instr_imm
 
     return instr
