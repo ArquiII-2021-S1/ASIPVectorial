@@ -189,7 +189,7 @@ def analyzeLine(line):
                 program.append(instr)
 
             # Data processing instructions
-            elif opname in (SUMEV, SUMEV, RESEE, SRL, SLL):
+            elif opname in (SUMEV, SUMVV, RESEE, SRL, SLL):
                 reg_dest = content[1]
                 reg_src  = content[2]
                 reg      = content[3]
