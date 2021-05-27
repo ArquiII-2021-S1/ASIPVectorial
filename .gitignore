@@ -13,3 +13,7 @@ simulation/
 *.bak
 
 greybox_tmp/
+
+*/__pycache__/
+
+*.qws
