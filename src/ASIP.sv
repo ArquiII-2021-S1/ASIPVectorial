@@ -1,2 +1,3 @@
-module ASIP()
+module ASIP();
+
 endmodule
