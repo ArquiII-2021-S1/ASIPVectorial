@@ -1,3 +1,6 @@
+import sys
+
+
 # Name of the instructions
 NOP   = "NOP"
 SAL   = "SAL"
@@ -10,8 +13,10 @@ SUMVV = "SUMVV"
 SUMEV = "SUMEV"
 SUMEI = "SUMEI"
 RESEE = "RESEE"
-SRL   = "SRL"
-SLL   = "SLL"
+SRV   = "SRV"
+SLV   = "SLV"
+SLE   = "SLE"
+
 
 # Dictionary with the instruction's code
 instructions = {
@@ -26,8 +31,9 @@ instructions = {
     SUMEV : "1000",
     SUMEI : "1001",
     RESEE : "1010",
-    SRL   : "1011",
-    SLL   : "1100",
+    SRV   : "1011",
+    SLV   : "1100",
+    SLE   : "1101",
 }
 
 # Dictionary with the register's code
@@ -189,7 +195,7 @@ def analyzeLine(line):
                 program.append(instr)
 
             # Data processing instructions
-            elif opname in (SUMEV, SUMVV, RESEE, SRL, SLL):
+            elif opname in (SUMEV, SUMVV, RESEE, SRV, SLV, SLE):
                 reg_dest = content[1]
                 reg_src  = content[2]
                 reg      = content[3]
@@ -271,3 +277,11 @@ def writeCodeMif():
     for i in range(0, len(program)):
         file.write(str(i)+" : "+program[i] + ";\n")
     file.write("END;" + "\n")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Please enter code filepath")
+    else:
+        filepath = sys.argv[1]
+        compile(filepath)
