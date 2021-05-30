@@ -106,14 +106,14 @@ module Pipe_ID_EX_ALU_Pipe_EX_MEM_tb #(N = 32)
         ALUControl_i_Pipe_ID_EX   = 2'b00; //Establecemos una suma
         #101
         $display("Vericando valores de salida de Pipe ID_EX");
-        assert (RD1_o_Pipe_ID_EX ==  = 32'b00000000000000000000000000000001) else $error("Valor de salida RD1_o_Pipe_ID_EX = %b no es el correcto ", RD1_o_Pipe_ID_EX);
-        assert (RD2_o_Pipe_ID_EX ==  = 32'b00000000000000000000000000000011) else $error("Valor de salida RD2_o_Pipe_ID_EX = %b no es el correcto ", RD2_o_Pipe_ID_EX);
+        assert (RD1_o_Pipe_ID_EX === 32'b00000000000000000000000000000001) else $error("Valor de salida RD1_o_Pipe_ID_EX = %b no es el correcto ", RD1_o_Pipe_ID_EX);
+        assert (RD2_o_Pipe_ID_EX === 32'b00000000000000000000000000000011) else $error("Valor de salida RD2_o_Pipe_ID_EX = %b no es el correcto ", RD2_o_Pipe_ID_EX);
         #150
         $display("Vericando resultado de la suma");
-        assert(ALUResult ==  = 32'b00000000000000000000000000000100) else $error("Resultado de la suma es incorrecto %b ",ALUResult);
+        assert(ALUResult === 32'b00000000000000000000000000000100) else $error("Resultado de la suma es incorrecto %b ",ALUResult);
         #101
         $display("Vericando Salida del pipe EX_MEM");
-        assert(AluResult_o_Pipe_EX_MEM ==  = 32'b00000000000000000000000000000100) else $error("Resultado de la suma en el pipe EX_MEM es incorrecto %b ",ALUResult);
+        assert(AluResult_o_Pipe_EX_MEM === 32'b00000000000000000000000000000100) else $error("Resultado de la suma en el pipe EX_MEM es incorrecto %b ",ALUResult);
         $display("Finaliza exitosamente la prueba");
         
         //Caso 2: resta resultado correcto

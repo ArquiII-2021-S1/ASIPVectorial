@@ -15,22 +15,22 @@ module VectorItemExtractor_tb();
         // Case 1
         address = 5'd0;
         #10;
-        assert(item ==  = 10'd50) else $error("Case 1 failed");
+        assert(item === 10'd50) else $error("Case 1 failed");
         
         // Case 2
         address = 5'd1;
         #10;
-        assert(item ==  = 10'd51) else $error("Case 2 failed");
+        assert(item === 10'd51) else $error("Case 2 failed");
         
         // Case 3
         address = 5'd2;
         #10;
-        assert(item ==  = 10'd52) else $error("Case 3 failed");
+        assert(item === 10'd52) else $error("Case 3 failed");
         
         // Case 4
         address = 5'd3;
         #10;
-        assert(item ==  = 10'd35) else $error("Case 4 failed");
+        assert(item === 10'd35) else $error("Case 4 failed");
         
     end
     

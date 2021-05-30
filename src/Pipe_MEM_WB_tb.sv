@@ -65,13 +65,13 @@ module Pipe_MEM_WB_tb #(N = 32)
         A3_i        = 4'b0011;  //REG03
         #101
         $display("Vericando valores de salida de Pipe MEM_WB");
-        assert(AluResult_o ==  = 32'h00000002) else $error("Valor de salida incorrecto %b",AluResult_o);
+        assert(AluResult_o === 32'h00000002) else $error("Valor de salida incorrecto %b",AluResult_o);
         $display("Verificando selección de ReadData_o como valor de salida del MUX");
-        assert(data_to_wb ==  = ReadData_o) else $error("Valor de salida incorrecto %b",data_to_wb);
+        assert(data_to_wb === ReadData_o) else $error("Valor de salida incorrecto %b",data_to_wb);
         WBSelect_i        = 1; //Cambio de señal para seleccionar ahora AluResult_o del mux simulado
         #101
         $display("Verificando selección de AluResult_o como valor de salida del MUX");
-        assert(data_to_wb ==  = AluResult_o) else $error("Valor de salida incorrecto %b",data_to_wb);
+        assert(data_to_wb === AluResult_o) else $error("Valor de salida incorrecto %b",data_to_wb);
         $display("Verificando Verificando datos en register file");
     end
 endmodule

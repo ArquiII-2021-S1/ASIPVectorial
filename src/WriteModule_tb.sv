@@ -55,50 +55,50 @@ module WriteModule_tb();
         #10;
         
         // Case 1
-        assert(write_address ==  = base_address) else $error("Case 1: Write Address failed");
-        assert(write_data == = scalar_data) else $error("Case 1: Write Data failed");
+        assert(write_address === base_address) else $error("Case 1: Write Address failed");
+        assert(write_data === scalar_data) else $error("Case 1: Write Data failed");
         
         op_type = 1;
         #10;
         
         // Case 2
-        assert(write_address ==  = (base_address+6'd1)) else $error("Case 2: Write Address failed");
-        assert(write_data == = vector_data[1]) else $error("Case 2: Write Data failed");
+        assert(write_address === (base_address+6'd1)) else $error("Case 2: Write Address failed");
+        assert(write_data === vector_data[1]) else $error("Case 2: Write Data failed");
         #10;
         
         // Case 3
-        assert(write_address ==  = (base_address+6'd2)) else $error("Case 3: Write Address failed");
-        assert(write_data == = vector_data[2]) else $error("Case 3: Write Data failed");
+        assert(write_address === (base_address+6'd2)) else $error("Case 3: Write Address failed");
+        assert(write_data === vector_data[2]) else $error("Case 3: Write Data failed");
         #10;
         
         // Case 4
-        assert(write_address ==  = (base_address+6'd3)) else $error("Case 4: Write Address failed");
-        assert(write_data == = vector_data[3]) else $error("Case 4: Write Data failed");
+        assert(write_address === (base_address+6'd3)) else $error("Case 4: Write Address failed");
+        assert(write_data === vector_data[3]) else $error("Case 4: Write Data failed");
         #10;
         
         // Case 5
-        assert(write_address ==  = (base_address+6'd4)) else $error("Case 5: Write Address failed");
-        assert(write_data == = vector_data[4]) else $error("Case 5: Write Data failed");
+        assert(write_address === (base_address+6'd4)) else $error("Case 5: Write Address failed");
+        assert(write_data === vector_data[4]) else $error("Case 5: Write Data failed");
         
         rst = 1;
         #10;
         rst = 0;
         
         // Case 6
-        assert(write_address ==  = base_address) else $error("Case 6: Write Address failed");
-        assert(write_data == = vector_data[0]) else $error("Case 6: Write Data failed");
+        assert(write_address === base_address) else $error("Case 6: Write Address failed");
+        assert(write_data === vector_data[0]) else $error("Case 6: Write Data failed");
         #10;
         
         // Case 7
-        assert(write_address ==  = (base_address+6'd1)) else $error("Case 7: Write Address failed");
-        assert(write_data == = vector_data[1]) else $error("Case 7: Write Data failed");
+        assert(write_address === (base_address+6'd1)) else $error("Case 7: Write Address failed");
+        assert(write_data === vector_data[1]) else $error("Case 7: Write Data failed");
         
         op_type = 0;
         #10;
         
         // Case 8
-        assert(write_address ==  = base_address) else $error("Case 8: Write Address failed");
-        assert(write_data == = scalar_data) else $error("Case 8: Write Data failed");
+        assert(write_address === base_address) else $error("Case 8: Write Address failed");
+        assert(write_data === scalar_data) else $error("Case 8: Write Data failed");
         #10;
         
     end

@@ -9,7 +9,7 @@ module ExtendScalarToVector_tb();
         
         scalar_i = 1;
         #5;
-        assert (vector_o[0] ==  = 1) else $error("Case 1: failed.");
+        assert (vector_o[0] === 1) else $error("Case 1: failed.");
     end
     
     

@@ -19,7 +19,7 @@ module Pipe_IF_ID_tb();
         
         instruction_i = 1;
         #1;
-        assert (instruction_o ! == instruction_i) else $error("Case 1 failed.");
+        assert (instruction_o !== instruction_i) else $error("Case 1 failed.");
         #1;
         
         

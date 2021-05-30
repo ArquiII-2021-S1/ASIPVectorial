@@ -21,8 +21,8 @@ module FinishedSignal(clk,
     end
     
     logic A, B;
-    assign A = counter ==  = vector_max;
-    assign B = counter ==  = 6'd1;
+    assign A = counter === vector_max;
+    assign B = counter === 6'd1;
     
     logic trigger;
     assign trigger = (B && ~op_type) || (A && op_type);
