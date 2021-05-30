@@ -12,6 +12,7 @@ ALMV  = "ALMV"
 SUMVV = "SUMVV"
 SUMEV = "SUMEV"
 SUMEI = "SUMEI"
+SUMEE = "SUMEE"
 RESEE = "RESEE"
 SRV   = "SRV"
 SLV   = "SLV"
@@ -30,10 +31,11 @@ instructions = {
     SUMVV : "0111",
     SUMEV : "1000",
     SUMEI : "1001",
-    RESEE : "1010",
-    SRV   : "1011",
-    SLV   : "1100",
-    SLE   : "1101",
+    SUMEE : "1010",
+    RESEE : "1011",
+    SRV   : "1100",
+    SLV   : "1101",
+    SLE   : "1110",
 }
 
 # Dictionary with the register's code
@@ -203,7 +205,7 @@ def analyzeLine(line):
                 program.append(instr)
 
             # Data processing instructions
-            elif opname in (SUMEV, SUMVV, RESEE, SRV, SLV, SLE):
+            elif opname in (SUMEV, SUMVV, SUMEE, RESEE, SRV, SLV, SLE):
                 reg_dest = content[1]
                 reg_src  = content[2]
                 reg      = content[3]

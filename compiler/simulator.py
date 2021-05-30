@@ -140,6 +140,18 @@ def SUMEV(reg_result, reg1, reg2):
 
     updatePC() # Actualizar PC
 
+
+def SUMEE(reg_result, reg1, reg2):
+    # Conversion de binario a entero
+    reg_result = bin2int(reg_result)
+    reg1 = bin2int(reg1)
+    reg2 = bin2int(reg2)
+
+    # Sum
+    registers[reg_result] = registers[reg1] + registers[reg2]
+
+    updatePC() # Actualizar PC
+
 def SUMVV(reg_result, reg1, reg2):
     # Conversion de binario a entero
     reg_result = bin2int(reg_result)
@@ -228,10 +240,11 @@ instructions = {
     "0111" : SUMVV,
     "1000" : SUMEV,
     "1001" : SUMEI,
-    "1010" : RESEE,
-    "1011" : SRV,
-    "1100" : SLV,
-    "1101" : SLE,
+    "1010" : SUMEE,
+    "1011" : RESEE,
+    "1100" : SRV,
+    "1101" : SLV,
+    "1110" : SLE,
 }
 
 def readInstruction(filename):
@@ -253,10 +266,11 @@ opALMV  = "0110"
 opSUMVV = "0111"
 opSUMEV = "1000"
 opSUMEI = "1001"
-opRESEE = "1010"
-opSRV   = "1011"
-opSLV   = "1100"
-opSLE   = "1101"
+opSUMEE = "1010"
+opRESEE = "1011"
+opSRV   = "1100"
+opSLV   = "1101"
+opSLE   = "1110"
 
 cycles = 0
 
@@ -292,7 +306,7 @@ def simulate():
             instructions[opcode](reg_src, reg)
         
         # Instrucciones de procesamiento de datos
-        elif opcode in (opSUMEV, opSUMVV, opRESEE, opSRV, opSLV, opSLE):
+        elif opcode in (opSUMEV, opSUMVV, opRESEE, opSRV, opSLV, opSLE, opSUMEE):
             instructions[opcode](reg_des, reg_src, reg)
         
         # Instrucciones de procesamiento de datos con inmediato
