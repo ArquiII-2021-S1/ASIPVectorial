@@ -38,22 +38,30 @@ instructions = {
 
 # Dictionary with the register's code
 registers = {
-    "RE0" : "0000",
-    "RE1" : "0001",
-    "RE2" : "0010",
-    "RE3" : "0011",
-    "RE4" : "0100",
-    "RE5" : "0101",
-    "RE6" : "0110",
-    "RE7" : "0111",
-    "RV0" : "1000",
-    "RV1" : "1001",
-    "RV2" : "1010",
-    "RV3" : "1011",
-    "RV4" : "1100",
-    "RV5" : "1101",
-    "RV6" : "1110",
-    "RV7" : "1111"
+    "RE0"  : "00000",
+    "RE1"  : "00001",
+    "RE2"  : "00010",
+    "RE3"  : "00011",
+    "RE4"  : "00100",
+    "RE5"  : "00101",
+    "RE6"  : "00110",
+    "RE7"  : "00111",
+    "RE8"  : "01000",
+    "RE9"  : "01001",
+    "RE10" : "01010",
+    "RE11" : "01011",
+    "RE12" : "01100",
+    "RE13" : "01101",
+    "RE14" : "01110",
+    "RE15" : "01111",
+    "RV0"  : "10000",
+    "RV1"  : "10001",
+    "RV2"  : "10010",
+    "RV3"  : "10011",
+    "RV4"  : "10100",
+    "RV5"  : "10101",
+    "RV6"  : "10110",
+    "RV7"  : "10111",
 }
 
 labels = {}        # Dictionary where the labels are stored
@@ -120,7 +128,7 @@ def decimalToBinary(number, bits):
 
 """
 This function encodes an instruction using the general structure
-    | 31-28  |  27-24   |  23-20  | 19-16 |   15-0    |
+    | 31-28  |  27-23   |  22-18  | 17-13 |   12-0    |
     | OpCode | REG_DEST | REG_SRC |  REG  | Label/Imm |
 
 opname:     string with the operation
@@ -133,10 +141,10 @@ return:     encoded instruction
 """
 def enconde_instr(opname, reg_dest, reg_src, reg, imm):
     # Default values
-    instr_reg_dest = "0000"
-    instr_reg_src  = "0000"
-    instr_reg      = "0000"
-    instr_imm      = "0" * 16
+    instr_reg_dest = "00000"
+    instr_reg_src  = "00000"
+    instr_reg      = "00000"
+    instr_imm      = "0" * 13
 
     # Gets the operation code
     instr_opcode = getInstructionCode(opname)
@@ -147,7 +155,7 @@ def enconde_instr(opname, reg_dest, reg_src, reg, imm):
     if reg != None: instr_reg = registers[reg]
     
     # Get the binary equivalent for the immediate
-    if imm != None: instr_imm = decimalToBinary(imm, 16)
+    if imm != None: instr_imm = decimalToBinary(imm, 13)
 
     instr = instr_opcode + \
             instr_reg_dest + \

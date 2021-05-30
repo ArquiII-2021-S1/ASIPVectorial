@@ -4,7 +4,7 @@ from bitstring import BitArray
 RAM = [0] * 262144
 
 # Registros
-registers = [0 for x in range(8)] + [ [0] * 20 for x in range(8)]
+registers = [0 for x in range(16)] + [ [0] * 20 for x in range(8)]
 
 # Memoria de instrucciones
 instr_mem = []
@@ -273,12 +273,12 @@ def simulate():
 
         # Instrucciones generales
         opcode  = instr[0:4]
-        reg_des = instr[4:8]
-        reg_src = instr[8:12]
-        reg     = instr[12:16]
+        reg_des = "0" + instr[4:9]
+        reg_src = "0" + instr[9:14]
+        reg     = "0" + instr[14:19]
 
         # Saltos
-        imm = instr[16:32]
+        imm = instr[19:32]
 
         global cycles
         cycles += 1
