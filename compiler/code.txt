@@ -1,0 +1,69 @@
+SUMEI   RE8 RE0 1
+SUMEI   RE4 RE0 187
+SUMEV   RV1 RV0 RE4
+SUMEI   RE4 RE0 75
+SUMEV   RV2 RV0 RE4
+
+
+
+alpha_composition
+SUMEI   RE12 RE0 1
+SUMEI   RE13 RE0 0
+SUMEI   RE14 RE0 1
+SUMEI   RE15 RE0 2
+
+SEQ     RE8 RE13 alpha_zero
+SEQ     RE8 RE14 alpha_one
+SEQ     RE8 RE15 alpha_two
+SAL     alpha_three
+
+alpha_zero
+SUMVV   RV3 RV0 RV2
+NOP
+NOP
+SAL     end_alpha_composition
+
+alpha_three
+SUMVV   RV3 RV0 RV1
+NOP
+NOP
+SAL     end_alpha_composition
+
+alpha_one
+SRV     RV4 RV1 RE12
+NOP
+NOP
+SRV     RV4 RV4 RE12
+SRV     RV7 RV2 RE12
+NOP
+NOP
+SRV     RV6 RV7 RE12
+NOP
+NOP
+SUMVV   RV3 RV6 RV7
+NOP
+NOP
+SUMVV   RV3 RV4 RV3
+NOP
+NOP
+SAL     end_alpha_composition  
+
+alpha_two
+SRV     RV7 RV1 RE12
+NOP
+NOP
+SRV     RV6 RV7 RE12
+NOP
+NOP
+SUMVV   RV6 RV6 RV7
+SRV     RV5 RV2 RE12
+NOP
+NOP
+SRV     RV5 RV5 RE12
+NOP
+NOP
+SUMVV   RV3 RV6 RV5
+
+
+end_alpha_composition
+NOP
