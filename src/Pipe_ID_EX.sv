@@ -1,6 +1,7 @@
 module Pipe_ID_EX #(
     N = 32,
-    V = 20
+    V = 20,
+    L = 8
 ) (
     CLK,
     RST,
@@ -42,16 +43,16 @@ module Pipe_ID_EX #(
   input logic CLK, RST, enable_i;
   input logic [N-1:0] RD1_S_i, RD2_S_i, Extend_i;
   input logic RegFile_WE_i, ALUSource_i, SetFlags_i, MemWE_i, WBSelect_i, OpSource_i;
-  input logic [3:0] A3_i;
+  input logic [4:0] A3_i;
   input logic [1:0] ALUControl_i, BranchSelect_i, OpType_i;
-  input logic [V-1:0][N-1:0] RD1_V_i, RD2_V_i;
+  input logic [V-1:0][L-1:0] RD1_V_i, RD2_V_i;
 
 
   output logic [N-1:0] RD1_S_o, RD2_S_o, Extend_o;
   output logic RegFile_WE_o, ALUSource_o, SetFlags_o, MemWE_o, WBSelect_o, OpSource_o;
-  output logic [3:0] A3_o;
+  output logic [4:0] A3_o;
   output logic [1:0] ALUControl_o, BranchSelect_o, OpType_o;
-  output logic [V-1:0][N-1:0] RD1_V_o, RD2_V_o;
+  output logic [V-1:0][L-1:0] RD1_V_o, RD2_V_o;
 
 
   always @(posedge CLK) begin

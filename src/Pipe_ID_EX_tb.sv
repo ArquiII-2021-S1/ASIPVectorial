@@ -5,14 +5,14 @@ module Pipe_ID_EX_tb ();
   logic CLK, RST, enable_i;
   logic [N-1:0] RD1_S_i, RD2_S_i, Extend_i;
   logic RegFile_WE_i, ALUSource_i, SetFlags_i, MemWE_i, WBSelect_i, OpSource_i;
-  logic [3:0] A3_i;
+  logic [4:0] A3_i;
   logic [1:0] ALUControl_i, BranchSelect_i, OpType_i;
   logic [V-1:0][N-1:0] RD1_V_i, RD2_V_i;
 
 
   logic [N-1:0] RD1_S_o, RD2_S_o, Extend_o;
   logic RegFile_WE_o, ALUSource_o, SetFlags_o, MemWE_o, WBSelect_o, OpSource_o;
-  logic [3:0] A3_o;
+  logic [4:0] A3_o;
   logic [1:0] ALUControl_o, BranchSelect_o, OpType_o;
   logic [V-1:0][N-1:0] RD1_V_o, RD2_V_o;
 
