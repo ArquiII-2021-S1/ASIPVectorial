@@ -119,8 +119,8 @@ module Decode_Stage_tb ();
       .I(I),  //cantidad items
       .L(L)  // 8bits
   ) u_Register_File (
-      .clk(clk),
-      .rst(rst),
+      .clk(CLK),
+      .rst(RST),
 
       .WE     (RFWE_WB),
       .A1     (A1_ID),
@@ -166,12 +166,12 @@ module Decode_Stage_tb ();
   logic [31:0]   counter;
 
 
-  always #1 CLK = !CLK;
+  always #5 CLK = !CLK;
 
   initial begin
     CLK = 0;
     //llenar register file
-    for (counter = 0; counter < 7; counter = counter + 1) begin
+    for (counter = 0; counter < 16; counter = counter + 1) begin
       wait(CLK == 1);
       #2;
       RFWE_WB = 1;
@@ -201,7 +201,7 @@ module Decode_Stage_tb ();
     //  instruction_IF[27:23]=   0    ;//A3
     //  instruction_IF[31:28]=    4'b1010   ;//OpCode
 
-    for (counter = 0; counter < 7; counter = counter + 1) begin
+    for (counter = 0; counter < 16; counter = counter + 1) begin
       wait(CLK == 0);
       #2;
       instruction_IF[12:0]  = 0;  //imm
@@ -219,7 +219,7 @@ module Decode_Stage_tb ();
 
 
     end
-
+    $finish;
   end
 
 
