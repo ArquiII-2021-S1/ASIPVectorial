@@ -63,6 +63,9 @@ SRV     RV5 RV5 RE12
 NOP
 NOP
 SUMVV   RV3 RV6 RV5
+NOP
+NOP
+SAL end_alpha_composition
 
 
 end_alpha_composition
