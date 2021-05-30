@@ -35,8 +35,8 @@ module Pipe_ID_EX #(
     RD2_S_o,
     RD2_V_o,
     RegFile_WE_o,
-    SetFlags_o
-    WBSelect_o,
+    SetFlags_o,
+    WBSelect_o
 );
 
   input logic CLK, RST, enable_i;
