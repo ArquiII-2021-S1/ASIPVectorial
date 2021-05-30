@@ -1,4 +1,4 @@
-module Vector_Register #(I=20, L=8) (input  logic CLK, RST, EN,
+module Vector_Register #(I=2, L=4) (input  logic CLK, RST, EN,
 												 input  logic [I-1:0] [L-1:0] Data_In,
 												 output logic [I-1:0] [L-1:0] Data_Out);
 								

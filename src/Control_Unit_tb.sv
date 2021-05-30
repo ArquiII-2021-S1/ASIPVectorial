@@ -2,10 +2,10 @@ module Control_Unit_tb();
 
 logic [3:0] OpCode;
 logic 	   Mem_Finished, Exe_Finished;
-logic       RegFileWE, ExtendSelect, ALUSource, MemWE, WBSelect, Finished;
+logic       RegFileWE, ExtendSelect, ALUSource, MemWE, WBSelect, OpSource, Finished;
 logic [1:0] BranchSelect, OpType, ALUControl;
 
-Control_Unit DUT(OpCode, Mem_Finished, Exe_Finished, RegFileWE, ExtendSelect, ALUSource, MemWE, WBSelect, Finished, BranchSelect, OpType, ALUControl);
+Control_Unit DUT(OpCode, Mem_Finished, Exe_Finished, RegFileWE, ExtendSelect, ALUSource, MemWE, OpSource, WBSelect, Finished, BranchSelect, OpType, ALUControl);
 
 initial begin
 	OpCode = 4'b0000;
