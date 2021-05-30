@@ -1,4 +1,53 @@
-SUMEI   RE8 RE0 1
+SUMEI   RE1 RE0 1
+SUMEI   RE2 RE0 17
+SLE     RE1 RE1 RE2
+SUMEI   RE1 RE1 28
+SUMEI   RE2 RE0 1
+
+
+horizontal
+SUMEI   RE8 RE0 400     # Red channel start address
+SUMEI   RE7 RE0 200     # Loop limit    
+SUMEI   RE9 RE0 0       # k start value
+SUMEI   RE10 RE0 0      # j start value
+SUMEI   RE11 RE0 0      # i start value
+
+
+SUMEE   RE6 RE0 RE1     # Copy result start address     
+CRGV    RV1 RE3         # Load mask section
+
+hor_iterate_rows
+SEQ     RE11 RE7 hor_end_iterate_rows      
+CRGV    RV2 RE8         # Load row section
+
+SAL  alpha_composition
+
+hor_continue_iterate_rows
+SUMEI   RE11 RE11 1     # Increment i counter by 1
+SUMEI   RE8 RE8 200     # Increment address by 200 to read the next row
+ALMV    RE6 RV3         # Store result section
+SUMEI   RE6 RE6 200     # Increment store counter by 200
+
+SAL hor_iterate_rows
+
+
+
+
+
+hor_end_iterate_rows
+
+
+
+
+
+
+SAL end_horizontal
+
+
+
+
+
+
 SUMEI   RE4 RE0 187
 SUMEV   RV1 RV0 RE4
 SUMEI   RE4 RE0 75
@@ -12,9 +61,9 @@ SUMEI   RE13 RE0 0
 SUMEI   RE14 RE0 1
 SUMEI   RE15 RE0 2
 
-SEQ     RE8 RE13 alpha_zero
-SEQ     RE8 RE14 alpha_one
-SEQ     RE8 RE15 alpha_two
+SEQ     RE2 RE13 alpha_zero
+SEQ     RE2 RE14 alpha_one
+SEQ     RE2 RE15 alpha_two
 SAL     alpha_three
 
 alpha_zero
@@ -69,4 +118,7 @@ SAL end_alpha_composition
 
 
 end_alpha_composition
+SAL hor_continue_iterate_rows
+
+end_horizontal
 NOP
