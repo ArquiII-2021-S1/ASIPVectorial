@@ -29,10 +29,11 @@ module Control_Unit(input 	logic[3:0] OpCode,
 			4'b0111: OUT = 12'b001001100010;//Add Vector-Vector
 			4'b1000: OUT = 12'b001001000010;//Add Vector-Scalar
 			4'b1001: OUT = 12'b001110100010;//Add Scalar-Immediate
-			4'b1010: OUT = 12'b001000101010;//Substract Scalar-Scalar
-			4'b1011: OUT = 12'b001001010010;//Shift Right Vector-Scalar
-			4'b1100: OUT = 12'b001001011010;//Shift Left Vector-Scalar
-			4'b1101: OUT = 12'b001000111010;//Shift Left Scalar-Scalar
+			4'b1010: OUT = 12'b001000100010;//Add Scalar-Scalar
+			4'b1011: OUT = 12'b001000101010;//Substract Scalar-Scalar
+			4'b1100: OUT = 12'b001001010010;//Shift Right Vector-Scalar
+			4'b1101: OUT = 12'b001001011010;//Shift Left Vector-Scalar
+			4'b1110: OUT = 12'b001000111010;//Shift Left Scalar-Scalar
 			default: OUT = 12'b0;
 		endcase
 	end
