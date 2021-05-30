@@ -8,7 +8,8 @@ module ForkVector #(parameter N = 32,
                     input logic 	[N-1:0] Scalar_i,
                     output logic 	[4-1:0][N-1:0] Vec_A_o,
                     output logic 	[4-1:0][N-1:0] Vec_B_o,
-                    output integer counter = 0);
+                    output integer counter = 0,
+                    output logic  ready_o);
     
     
     
@@ -25,12 +26,20 @@ module ForkVector #(parameter N = 32,
     always @(negedge (CLK))begin
         if (RST == 0)begin
             counter = counter+1;
+            if(ready_o)begin
+                ready_o=0;
+                counter=0;
+            end 
+            
             if (counter == 5) begin
                 counter = 0;
+                ready_o=1;
             end
+            
         end
         else begin
             counter = 0;
+            ready_o=0;
         end
     end
     

@@ -9,6 +9,7 @@ module Execute_Stage_tb ();
   integer counter;
   logic [4-1:0][N-1:0] vector_i;
 
+  logic fork_ready;
 
   // Pipes
   logic enable_ID_EX, enable_EX_MEM;
@@ -133,7 +134,8 @@ module Execute_Stage_tb ();
       .Scalar_i(RD1_S_EX),
       .Vec_A_o(Vec_A_o),
       .Vec_B_o(Vec_B_o),
-      .counter(counter)
+      .counter(counter),
+      .ready_o(fork_ready)
   );
 
   JoinVector #(
@@ -195,7 +197,7 @@ module Execute_Stage_tb ();
   ALU #(
       .N(N)
   ) aluScalar (
-      .A(RD2_S_EX),
+      .A(RD1_S_EX),
       .B(alumux_result),
       .ALUControl(ALUControl_EX),
       .ALUResult(AluResult_S_EX),
@@ -207,9 +209,9 @@ module Execute_Stage_tb ();
   Execute_Stage_ready #(
       .N(N)
   ) u_Execute_Stage_ready (
-      .OpType_i (OpType_EX),
-      .counter_i(counter),
-      .ready_o  (ready_o)
+      .OpType_i(OpType_EX),
+      .fork_ready_i(fork_ready),
+      .ready_o(ready_o)
   );
 
 
@@ -217,7 +219,7 @@ module Execute_Stage_tb ();
 
 
 
-assign enable_EX_MEM = ready_o;
+  assign enable_EX_MEM = ready_o;
 
 
 
@@ -225,8 +227,15 @@ assign enable_EX_MEM = ready_o;
 
 
   initial begin
+    CLK             = 0;
+    RST             = 1;
+    #1 RST = 0;
+    #5;
 
-    enable_ID_EX=1;
+
+
+
+    enable_ID_EX = 1;
     // enable_EX_MEM=1;
     // OpType_EX     = 2'b01;  // vector-vector
     // ALUControl_EX = 2'b00;
@@ -249,9 +258,84 @@ assign enable_EX_MEM = ready_o;
     BranchSelect_ID = 0;
     OpType_ID       = 2'b10;
 
-    CLK             = 0;
-    RST             = 1;
-    #1 RST = 0;
+    
+
+    $display("esperando\n");
+    wait(ready_o == 1);
+    $display("listo\n");
+
+
+    RD1_S_ID        = 5;
+    RD2_S_ID        = 9;
+    Extend_ID       = 0;
+    RegFile_WE_ID   = 0;
+    ALUSource_ID    = 0;
+    SetFlags_ID     = 1'b1;
+    MemWE_ID        = 0;
+    WBSelect_ID     = 0;
+    OpSource_ID     = 0;
+    A3_ID           = 0;
+    ALUControl_ID   = 2'b00;
+    BranchSelect_ID = 0;
+    OpType_ID       = 2'b01;
+    #2;
+    $display("esperando\n");
+    wait(ready_o == 1);
+    $display("listo\n");
+
+    RD1_S_ID        = 9;
+    RD2_S_ID        = 10;
+    Extend_ID       = 0;
+    RegFile_WE_ID   = 0;
+    ALUSource_ID    = 0;
+    SetFlags_ID     = 1'b1;
+    MemWE_ID        = 0;
+    WBSelect_ID     = 0;
+    OpSource_ID     = 0;
+    A3_ID           = 0;
+    ALUControl_ID   = 2'b00;
+    BranchSelect_ID = 0;
+    OpType_ID       = 2'b01;
+    #2;
+    $display("esperando\n");
+    wait(ready_o == 1);
+    $display("listo\n");
+
+    RD1_S_ID        = 10;
+    RD2_S_ID        = 9;
+    Extend_ID       = 0;
+    RegFile_WE_ID   = 0;
+    ALUSource_ID    = 0;
+    SetFlags_ID     = 1'b1;
+    MemWE_ID        = 0;
+    WBSelect_ID     = 0;
+    OpSource_ID     = 0;
+    A3_ID           = 0;
+    ALUControl_ID   = 2'b00;
+    BranchSelect_ID = 0;
+    OpType_ID       = 2'b10;
+    #2;
+    $display("esperando\n");
+    wait(ready_o == 1);
+    $display("listo\n");
+
+    RD1_S_ID        = 9;
+    RD2_S_ID        = 10;
+    Extend_ID       = 0;
+    RegFile_WE_ID   = 0;
+    ALUSource_ID    = 0;
+    SetFlags_ID     = 1'b1;
+    MemWE_ID        = 0;
+    WBSelect_ID     = 0;
+    OpSource_ID     = 0;
+    A3_ID           = 0;
+    ALUControl_ID   = 2'b00;
+    BranchSelect_ID = 0;
+    OpType_ID       = 2'b01;
+    #2;
+    $display("esperando\n");
+    wait(ready_o == 1);
+    $display("listo\n");
   end
 
 
