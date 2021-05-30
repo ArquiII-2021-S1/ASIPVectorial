@@ -1,18 +1,24 @@
 # Alpha Composition Algorithm
 
 ## Inputs
+```
 RE8 -> alpha
 RV1 -> mask channel
 RV2 -> original channel
+```
 
 ## Outputs
+```
 RV3 -> result
+```
 
 ## Internal variables
+```
 RE12 -> stores 1 to make the shifts
+```
 
 ## Pseudocode
-
+```
 if alpha == 0  # Case 0%
     result = original channel
 
@@ -38,3 +44,4 @@ if alpha == 2  # Case 75%
     Rin1 = Rin1 >> 1
     
     result = Rin1 + Rin2
+```
