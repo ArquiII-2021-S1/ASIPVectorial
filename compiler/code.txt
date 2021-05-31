@@ -71,6 +71,42 @@ NOP
 SAL     load_normal_degraded_mask
 
 
+select_filter
+SUMEI   RE12 RE0 4079   # Building filter address
+SUMEI   RE14 RE0 6
+NOP
+NOP
+SLE     RE12 RE12 RE14
+SUMEI   RE14 RE0 48
+NOP  
+NOP  
+SUMEE   RE12 RE12 RE14  # Filter address
+NOP
+NOP
+
+CRGE    RE12 RE12       # Load filter type 
+SUMEI   RE14 RE0 0      # Horizontal filter value
+NOP
+NOP
+SEQ     RE12 RE14 hor_iterate_colums
+
+SUMEI   RE14 RE0 1      # Vertical filter value
+NOP
+NOP
+SEQ     RE12 RE14 ver_iterate_colums
+
+SUMEI   RE14 RE0 2      # Diagonal filter value
+NOP
+NOP
+SEQ     RE12 RE14 dia_iterate_colums
+
+SUMEI   RE14 RE0 3      # Custom filter value
+NOP
+NOP
+SEQ     RE12 RE14 hor_iterate_colums
+
+
+
 load_custom_degraded_mask
 SUMEI   RE14 RE0 0      # 0% intensity
 NOP
@@ -93,15 +129,15 @@ SAL     RE15 RE14 custom_degraded_100
 
 custom_degraded_25
 SUMEI   RE3 RE0 600     # 25% intensity
-SAL hor_iterate_colums
+SAL select_filter
 
 custom_degraded_75
 SUMEI   RE3 RE0 800     # 75% intensity
-SAL hor_iterate_colums
+SAL select_filter
 
 custom_degraded_100
 SUMEI   RE3 RE0 1000    # 100% intensity
-SAL hor_iterate_colums
+SAL select_filter
 
 
 
@@ -133,18 +169,19 @@ SUMEI   RE14 RE0 4
 NOP
 NOP
 SLE     RE3 RE3 RE14    # Mask start address
+SAL select_filter
 
 normal_degraded_25
 SUMEI   RE3 RE0 0       # Mask start address
-SAL hor_iterate_colums
+SAL select_filter
 
 normal_degraded_75
 SUMEI   RE3 RE0 200     # Mask start address
-SAL hor_iterate_colums
+SAL select_filter
 
 normal_degraded_100
 SUMEI   RE3 RE0 400     # Mask start address
-SAL hor_iterate_colums
+SAL select_filter
 
 
 
@@ -265,4 +302,6 @@ SAL hor_continue_iterate_rows
 
 end_horizontal
 end_process
+ver_iterate_colums
+dia_iterate_colums
 NOP
