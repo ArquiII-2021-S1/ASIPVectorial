@@ -15,15 +15,7 @@ def getPixelArrayFromDumpFile(filename):
             lines.append(int(line.split(':')[1]))
     return lines
 
-# Esta funcion es usada para tomar dump file y crear un arreglo de valores de pixeles.
-def getArrayFromFile(filename):
-    #fileInput = open(filename, "r")
-    with open(filename, "r") as fileInput:
-        lines = []
-        for line in fileInput:
-            #print(line.split(':')[1])
-            lines.append(int(line))
-    return lines
+
 
 def writeImageMif(fileName, pixels):
     # filename: "red.mif"
@@ -93,12 +85,55 @@ def show():
         unifiedImagePixels.append( pixel )
     print(unifiedImagePixels)
     plotImage(unifiedImagePixels,200,200)
-    
-def populateROM(imageFile, gradientFilename, customGradientFileName, filename1,filename2):
+
+##################################################3
+
+
+def getImagePixels(imageFile):
     image = Image.open(imageFile, "r")
     width, height = image.size
     pixels = list(image.getdata())
+    return pixels
 
+def writeArrayToMif(file, startIndex, endIndex, array):
+    index = 0
+    for i in range (startIndex , endIndex): # starIndex ---> endIndex-1
+        file.write(str(i) + " : " + str(array[index]) + ";\n")
+        index = index + 1
+
+# Esta funcion es usada para tomar dump file y crear un arreglo de valores de pixeles.
+def getArrayFromFile(filename):
+    #fileInput = open(filename, "r")
+    with open(filename, "r") as fileInput:
+        lines = []
+        for line in fileInput:
+            #print(line.split(':')[0])
+            lines.append(int(line))
+    return lines
+
+
+def populateROM(imageFile, gradientFilename, customGradientFileName, filename1,filename2):
+    gradient25FileName = "./input/gradient-25.txt"
+    gradient25Array = getArrayFromFile(gradient25FileName)
+
+    gradient75FileName = "./input/gradient-75.txt"
+    gradient75Array = getArrayFromFile(gradient75FileName)
+    
+    gradient100FileName = "./input/gradient-100.txt"
+    gradient100Array = getArrayFromFile(gradient100FileName)
+
+
+    customGradient25FileName = "./input/custom-gradient-25.txt"
+    customGradient25Array = getArrayFromFile(customGradient25FileName)
+
+    customGradient75FileName = "./input/custom-gradient-75.txt"
+    customGradient75Array = getArrayFromFile(customGradient75FileName)
+
+    customGradient100FileName = "./input/custom-gradient-100.txt"
+    customGradient100Array = getArrayFromFile(customGradient100FileName)
+
+
+    pixels = getImagePixels(imageFile)
     channelRed = []
     channelGreen = []
     channelBlue = []
@@ -106,12 +141,6 @@ def populateROM(imageFile, gradientFilename, customGradientFileName, filename1,f
         channelRed.append(pixels[item][0]) # channel red
         channelGreen.append(pixels[item][1])  # channel green
         channelBlue.append(pixels[item][2]) # channel blue
-    print(width)
-    print(height)
-
-
-    gradientArray = getArrayFromFile(gradientFilename)
-    customGradientArray =getArrayFromFile(customGradientFileName)
 
     depth = 2 ** 16
     filePart1 = open(filename1, "w")
@@ -125,21 +154,30 @@ def populateROM(imageFile, gradientFilename, customGradientFileName, filename1,f
     )
     filePart1.write(header + "\n")
 
-    for i in range (0 , len(gradientArray)): # 0 - 199
-        filePart1.write(str(i) + " : " + str(gradientArray[i]) + ";\n")
-    
-    for j in range (0 , len(customGradientArray)) : # 200 - 399 
-        filePart1.write(str(j+200) + " : " + str(customGradientArray[j]) + ";\n")
-    
-    for r in range (0,len(channelRed)):
-        filePart1.write(str(r+400) + " : " + str(channelRed[r]) + ";\n")
+    # degradado normal del 25% 
+    writeArrayToMif(filePart1,0,200,gradient25Array)
+    # degradado normal del 75% 
+    writeArrayToMif(filePart1,200,400,gradient75Array)
+    # degradado normal del 100% 
+    writeArrayToMif(filePart1,400,600,gradient100Array)
 
-    for g in range (0,25136):
-        filePart1.write(str(g+40400) + " : " + str(channelGreen[g]) + ";\n")
+    # degradado personalizado del 25% 
+    writeArrayToMif(filePart1,600,800,customGradient25Array)
+    # degradado personalizado del 75% 
+    writeArrayToMif(filePart1,800,1000,customGradient75Array)
+    # degradado personalizado del 100% 
+    writeArrayToMif(filePart1,1000,1200,customGradient100Array)
+
+    #canal red
+    writeArrayToMif(filePart1,1200,41200,channelRed)
+    
+    #canal green parte 1
+    writeArrayToMif(filePart1,41200,65536,channelGreen[:24336])
+
     filePart1.write("END;" + "\n")
     
     filePart2 = open(filename2, "w")
-    header = """DEPTH = {}; -- The size of memory in words
+    header = """DEPTH = {}; -- The size of memory in words 
     WIDTH = 8; -- The size of data in bits
     ADDRESS_RADIX = DEC; -- The radix for address values
     DATA_RADIX = DEC; -- The radix for data values
@@ -149,12 +187,15 @@ def populateROM(imageFile, gradientFilename, customGradientFileName, filename1,f
     )
     filePart2.write(header + "\n")
 
-    print(len(channelGreen))
-    for g in range (0,25136):
-        filePart2.write(str(g) + " : " + str(channelGreen[g+14864]) + ";\n")
+    #canal green parte 2
+    writeArrayToMif(filePart2,0,15664,channelGreen[24336:])
     
-    for b in range (0,len(channelBlue)):
-        filePart2.write(str(b+25136) + " : " + str(channelBlue[b]) + ";\n")
+    #canal blue
+    writeArrayToMif(filePart2,15664,55664,channelBlue)
+
+    # empty mem
+    writeArrayToMif(filePart2,55664,65536,np.zeros((9872,), dtype=int))
+
     filePart2.write("END;" + "\n")
 
 
