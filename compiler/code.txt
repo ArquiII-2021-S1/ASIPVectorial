@@ -2,24 +2,23 @@ SUMEI   RE1 RE0 1
 SUMEI   RE2 RE0 17
 SLE     RE1 RE1 RE2
 SUMEI   RE1 RE1 28
-SUMEI   RE2 RE0 1
+SUMEI   RE2 RE0 2
 
 
 horizontal
 SUMEI   RE5 RE0 400     # Red channel start address
+SUMEI   RE10 RE0 0      # j start value
 SUMEI   RE7 RE0 200     # Loop limit    
 SUMEI   RE9 RE0 0       # k start value
-SUMEI   RE10 RE0 0      # j start value
-SUMEI   RE11 RE0 0      # i start value
 
 
 
 hor_iterate_colums
 SEQ     RE10 RE7 hor_end_iterate_colums
+SUMEI   RE11 RE0 0      # i start value
 SUMEE   RE15 RE3 RE10   # RE15 = mask_start_address + j
 SUMEE   RE6 RE1 RE10    # store_address = store_start_address + j
 SUMEE   RE8 RE5 RE10    # row_start_address = row_start_address + j
-
 CRGV    RV1 RE15        # Load mask section
 
 
