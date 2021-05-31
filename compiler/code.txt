@@ -1,4 +1,4 @@
-SUMEI   RE2 RE0 2       # Alpha value
+SUMEI   RE2 RE0 2      # Alpha value
 
 
 SUMEI   RE9 RE0 0       # k start value
@@ -32,8 +32,69 @@ SLE     RE1 RE1 RE15
 NOP
 NOP
 SUMEI   RE1 RE1 28      # Result store start address
-SUMEI   RE3 RE0 1000    # Mask start address
-SAL     hor_iterate_colums
+
+SUMEI   RE15 RE0 4079   # Building red channel intensity address
+SUMEI   RE14 RE0 6
+NOP
+NOP
+SLE     RE15 RE15 RE14
+SUMEI   RE14 RE0 44
+NOP  
+NOP  
+SUMEE   RE15 RE15 RE14  # red channel intensity address
+NOP
+NOP
+CRGE    RE15 RE15       # load red channel intensity
+NOP
+NOP
+
+SAL     load_normal_degraded_mask
+
+
+
+
+
+load_normal_degraded_mask
+SUMEI   RE14 RE0 0      # 0% intensity
+NOP
+NOP
+SEQ     RE15 RE14       zero_degraded
+
+SUMEI   RE14 RE0 1      # 25% intensity
+NOP
+NOP
+SEQ     RE15 RE14 normal_degraded_25
+
+SUMEI   RE14 RE0 2      # 75% intensity
+NOP
+NOP
+SEQ     RE15 RE14 normal_degraded_75
+
+NOP     # 100% intensity
+SAL     RE15 RE14 normal_degraded_100
+
+
+zero_degraded
+SUMEI   RE3 RE0 7575
+SUMEI   RE14 RE0 4
+NOP
+NOP
+SLE     RE3 RE3 RE14    # Mask start address
+
+normal_degraded_25
+SUMEI   RE3 RE0 0       # Mask start address
+SAL hor_iterate_colums
+
+normal_degraded_75
+SUMEI   RE3 RE0 200     # Mask start address
+SAL hor_iterate_colums
+
+normal_degraded_100
+SUMEI   RE3 RE0 400     # Mask start address
+SAL hor_iterate_colums
+
+
+
 
 
 
