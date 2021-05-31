@@ -48,7 +48,60 @@ CRGE    RE15 RE15       # load red channel intensity
 NOP
 NOP
 
+
+SUMEI   RE12 RE0 4079   # Building filter address
+SUMEI   RE14 RE0 6
+NOP
+NOP
+SLE     RE12 RE12 RE14
+SUMEI   RE14 RE0 48
+NOP  
+NOP  
+SUMEE   RE12 RE12 RE14  # Filter address
+NOP
+NOP
+
+CRGE    RE12 RE12       # Load filter type 
+SUMEI   RE14 RE0 3      # Custom mask value
+NOP
+NOP
+SEQ     RE12 RE14 load_custom_degraded_mask
+NOP
+NOP
 SAL     load_normal_degraded_mask
+
+
+load_custom_degraded_mask
+SUMEI   RE14 RE0 0      # 0% intensity
+NOP
+NOP
+SEQ     RE15 RE14       zero_degraded
+
+SUMEI   RE14 RE0 1      # 25% intensity
+NOP
+NOP
+SEQ     RE15 RE14 custom_degraded_25
+
+SUMEI   RE14 RE0 2      # 75% intensity
+NOP
+NOP
+SEQ     RE15 RE14 custom_degraded_75
+
+NOP     # 100% intensity
+SAL     RE15 RE14 custom_degraded_100
+
+
+custom_degraded_25
+SUMEI   RE3 RE0 600     # 25% intensity
+SAL hor_iterate_colums
+
+custom_degraded_75
+SUMEI   RE3 RE0 800     # 75% intensity
+SAL hor_iterate_colums
+
+custom_degraded_100
+SUMEI   RE3 RE0 1000    # 100% intensity
+SAL hor_iterate_colums
 
 
 
