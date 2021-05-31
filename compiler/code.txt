@@ -6,15 +6,22 @@ SUMEI   RE2 RE0 1
 
 
 horizontal
-SUMEI   RE8 RE0 400     # Red channel start address
+SUMEI   RE5 RE0 400     # Red channel start address
 SUMEI   RE7 RE0 200     # Loop limit    
 SUMEI   RE9 RE0 0       # k start value
 SUMEI   RE10 RE0 0      # j start value
 SUMEI   RE11 RE0 0      # i start value
 
 
-SUMEE   RE6 RE0 RE1     # Copy result start address     
-CRGV    RV1 RE3         # Load mask section
+
+hor_iterate_colums
+SEQ     RE10 RE7 hor_end_iterate_colums
+SUMEE   RE15 RE3 RE10   # RE15 = mask_start_address + j
+SUMEE   RE6 RE1 RE10    # store_address = store_start_address + j
+SUMEE   RE8 RE5 RE10    # row_start_address = row_start_address + j
+
+CRGV    RV1 RE15        # Load mask section
+
 
 hor_iterate_rows
 SEQ     RE11 RE7 hor_end_iterate_rows      
@@ -30,16 +37,14 @@ SUMEI   RE6 RE6 200     # Increment store counter by 200
 
 SAL hor_iterate_rows
 
-
-
-
-
 hor_end_iterate_rows
+SUMEI   RE10 RE10 20    # j = j + 20
+NOP
+NOP
+SAL     hor_iterate_colums
 
 
-
-
-
+hor_end_iterate_colums
 
 SAL end_horizontal
 
