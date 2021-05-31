@@ -2,7 +2,7 @@
 
 ## Inputs
 ```
-RE8 -> alpha
+RE2 -> alpha
 RV1 -> mask channel
 RV2 -> original channel
 ```
@@ -15,6 +15,9 @@ RV3 -> result
 ## Internal variables
 ```
 RE12 -> stores 1 to make the shifts
+RE13 -> stores 0
+RE14 -> stores 1
+RE15 -> stores 2
 ```
 
 ## Pseudocode
