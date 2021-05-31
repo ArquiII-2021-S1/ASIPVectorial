@@ -1,15 +1,40 @@
-SUMEI   RE1 RE0 1
-SUMEI   RE2 RE0 17
-SLE     RE1 RE1 RE2
-SUMEI   RE1 RE1 28
-SUMEI   RE2 RE0 2
+SUMEI   RE2 RE0 2       # Alpha value
 
 
-horizontal
-SUMEI   RE5 RE0 400     # Red channel start address
-SUMEI   RE10 RE0 0      # j start value
-SUMEI   RE7 RE0 200     # Loop limit    
 SUMEI   RE9 RE0 0       # k start value
+SUMEI   RE7 RE0 200     # Loop limit    
+
+
+
+iterate_channels
+SUMEI   RE15 RE0 4      # k max value
+SUMEI   RE10 RE0 0      # j start value
+SUMEI   RE13 RE0 0      # red channel 
+SEQ RE9 RE15 end_process
+SUMEI   RE14 RE0 1      # green channel
+SUMEI   RE15 RE0 2      # blue channel
+NOP
+
+SEQ RE9 RE13 process_red
+SEQ RE9 RE14 end_process
+SEQ RE9 RE15 end_process
+
+
+
+
+process_red
+SUMEI   RE5 RE0 1200    # Red channel start address
+SUMEI   RE1 RE0 1
+SUMEI   RE15 RE0 17
+NOP
+NOP
+SLE     RE1 RE1 RE15
+NOP
+NOP
+SUMEI   RE1 RE1 28      # Result store start address
+SUMEI   RE3 RE0 1000    # Mask start address
+SAL     hor_iterate_colums
+
 
 
 
@@ -44,10 +69,10 @@ SAL     hor_iterate_colums
 
 
 hor_end_iterate_colums
-
-SAL end_horizontal
-
-
+SUMEI   RE9 RE9 1       # k = k + 1
+NOP
+NOP
+SAL  iterate_channels
 
 
 
@@ -125,4 +150,5 @@ end_alpha_composition
 SAL hor_continue_iterate_rows
 
 end_horizontal
+end_process
 NOP
