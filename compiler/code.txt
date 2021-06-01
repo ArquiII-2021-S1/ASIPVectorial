@@ -16,7 +16,7 @@ SUMEI   RE15 RE0 2      # blue channel
 NOP
 
 SEQ RE9 RE13 process_red
-SEQ RE9 RE14 end_process
+SEQ RE9 RE14 process_green
 SEQ RE9 RE15 end_process
 
 
@@ -69,6 +69,62 @@ SEQ     RE12 RE14 load_custom_degraded_mask
 NOP
 NOP
 SAL     load_normal_degraded_mask
+
+
+process_green
+SUMEI   RE5 RE0 2575    # Building green channel start address
+SUMEI   RE15 RE0 4
+NOP
+NOP
+SLE     RE5 RE5 RE15    # Green channel start address
+
+SUMEI   RE1 RE0 1336    # Building store start address
+SUMEI   RE15 RE0 7
+NOP
+NOP
+SLE     RE1 RE1 RE15
+NOP
+NOP
+SUMEI   RE1 RE1 92      # Result store start address
+
+SUMEI   RE15 RE0 4079   # Building green channel intensity address
+SUMEI   RE14 RE0 6
+NOP
+NOP
+SLE     RE15 RE15 RE14
+SUMEI   RE14 RE0 45
+NOP  
+NOP  
+SUMEE   RE15 RE15 RE14  # red channel intensity address
+NOP
+NOP
+CRGE    RE15 RE15       # load red channel intensity
+NOP
+NOP
+
+SUMEI   RE12 RE0 4079   # Building filter address
+SUMEI   RE14 RE0 6
+NOP
+NOP
+SLE     RE12 RE12 RE14
+SUMEI   RE14 RE0 48
+NOP  
+NOP  
+SUMEE   RE12 RE12 RE14  # Filter address
+NOP
+NOP
+CRGE    RE12 RE12       # Load filter type 
+
+SUMEI   RE14 RE0 3      # Custom mask value
+NOP
+NOP
+SEQ     RE12 RE14 load_custom_degraded_mask
+NOP
+NOP
+SAL     load_normal_degraded_mask
+
+
+
 
 
 select_filter
