@@ -1,6 +1,7 @@
 module Pipe_MEM_WB #(
     N = 32,
-    V = 20
+    V = 20,
+    L=8
 ) (
     CLK,
     RST,
@@ -33,14 +34,14 @@ module Pipe_MEM_WB #(
   input logic RegFile_WE_i, WBSelect_i;
   input logic [3:0] A3_i;
   input logic [1:0] OpType_i;
-  input logic [V-1:0][N-1:0] Data_Mem_V_i, Data_Result_V_i;
+  input logic [V-1:0][L-1:0] Data_Mem_V_i, Data_Result_V_i;
 
 
   output logic [N-1:0] Data_Mem_S_o, Data_Result_S_o;
   output logic RegFile_WE_o, WBSelect_o;
   output logic [3:0] A3_o;
   output logic [1:0] OpType_o;
-  output logic [V-1:0][N-1:0] Data_Mem_V_o, Data_Result_V_o;
+  output logic [V-1:0][L-1:0] Data_Mem_V_o, Data_Result_V_o;
 
   always @(posedge CLK)
     if (RST) begin

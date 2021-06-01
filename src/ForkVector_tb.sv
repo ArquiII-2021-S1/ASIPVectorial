@@ -2,6 +2,7 @@ module ForkVector_tb();
     parameter N = 32, V = 20;
     logic CLK;
     logic RST;
+	 logic ready_o;
     logic[1:0] OpType;
     logic [V-1:0][N-1:0] RD1_VEC_i;
     logic [V-1:0][N-1:0] RD2_VEC_i;
