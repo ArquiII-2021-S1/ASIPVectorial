@@ -186,20 +186,80 @@ def populateROM(imageFile, gradientFilename, customGradientFileName, filename1,f
         depth
     )
     filePart2.write(header + "\n")
+    offset = 0
 
     #canal green parte 2
-    writeArrayToMif(filePart2,0,15664,channelGreen[24336:])
+    writeArrayToMif(filePart2,offset+0,offset+15664,channelGreen[24336:])
     
     #canal blue
-    writeArrayToMif(filePart2,15664,55664,channelBlue)
+    writeArrayToMif(filePart2,offset+15664,offset+55664,channelBlue)
 
     # empty mem
-    writeArrayToMif(filePart2,55664,65536,np.zeros((9872,), dtype=int))
+    writeArrayToMif(filePart2,offset+55664,offset+65536,np.zeros((9872,), dtype=int))
 
     filePart2.write("END;" + "\n")
 
+
+def populateRAM(filename1,filename2):
+    depth = 2 ** 16
+    fileRAMPart1 = open(filename1, "w")
+    header = """DEPTH = {}; -- The size of memory in words
+    WIDTH = 8; -- The size of data in bits
+    ADDRESS_RADIX = DEC; -- The radix for address values
+    DATA_RADIX = DEC; -- The radix for data values
+    CONTENT -- start of (address : data pairs)
+    BEGIN \n""".format(
+        depth
+    )
+    fileRAMPart1.write(header + "\n")
+    #Intensidad del rojo
+    fileRAMPart1.write(str(261100) + " : " + str(0) + ";\n")
+
+    #Intensidad del azul
+    fileRAMPart1.write(str(261101) + " : " + str(0) + ";\n")
+    
+    #Intensidad del verde
+    fileRAMPart1.write(str(261102) + " : " + str(0) + ";\n")
+
+    #Transparencia del degradado
+    fileRAMPart1.write(str(261103) + " : " + str(0) + ";\n")
+
+    # Filtro
+    fileRAMPart1.write(str(261104) + " : " + str(0) + ";\n")
+    
+    
+    # Imagen filtrada canal rojo 40 000 espacios
+    writeArrayToMif(fileRAMPart1,131100,171099,np.zeros((40000,), dtype=int))
+
+    # Imagen filtrada canal verde 40 000 espacios 25531 para este archivo
+    writeArrayToMif(fileRAMPart1,171099,196630,np.zeros((25531,), dtype=int))
+
+    fileRAMPart1.write("END;" + "\n")
+
+    fileRAMPart2 = open(filename2, "w")
+    header = """DEPTH = {}; -- The size of memory in words
+    WIDTH = 8; -- The size of data in bits
+    ADDRESS_RADIX = DEC; -- The radix for address values
+    DATA_RADIX = DEC; -- The radix for data values
+    CONTENT -- start of (address : data pairs)
+    BEGIN \n""".format(
+        depth
+    )
+    fileRAMPart2.write(header + "\n")
+
+    # Imagen filtrada canal verde 14469 espacios restantes
+    writeArrayToMif(fileRAMPart2,196630,211100,np.zeros((25531,), dtype=int))
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+    # Imagen filtrada canal azul 40 000 espacios
+    writeArrayToMif(fileRAMPart2,211100,251100,np.zeros((40000,), dtype=int))
+
+    
+    writeArrayToMif(fileRAMPart2,251100,262167,np.zeros((11067,), dtype=int))
+    
+    fileRAMPart2.write("END;" + "\n")
 
 
 
 
 populateROM("./input/test.png", "./input/gradient.txt", "./input/customGradient.txt","./output/rom1.mif","./output/rom2.mif")
+populateRAM("./output/ram1.mif","./output/ram2.mif")
