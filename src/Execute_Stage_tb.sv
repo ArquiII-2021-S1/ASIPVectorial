@@ -16,7 +16,7 @@ logic [1:0] ALUControl, ALUFlags;
 logic 	[4-1:0][N-1:0] vector_i;
 logic 	[V-1:0][N-1:0] vector_o;
 
-ForkVector #(.N(N), .V(V)) forckVector(
+ForkVector #(.N(N), .V(V)) forkVector(
                         .CLK(CLK),
                         .RST(RST),
                         .OpType(OpType),
