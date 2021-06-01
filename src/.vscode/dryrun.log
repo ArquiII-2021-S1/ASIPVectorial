@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/gsegura/Documents/TEC/2021/S1/arqui2/proyecto2/ASIPVectorial/src'
+make: Leaving directory '/home/gsegura/Documents/TEC/2021/S1/arqui2/proyecto2/ASIPVectorial/src'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+ 
