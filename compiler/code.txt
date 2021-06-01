@@ -10,14 +10,14 @@ iterate_channels
 SUMEI   RE15 RE0 4      # k max value
 SUMEI   RE10 RE0 0      # j start value
 SUMEI   RE13 RE0 0      # red channel 
-SEQ RE9 RE15 end_process
+SEQ     RE9 RE15 end_process
 SUMEI   RE14 RE0 1      # green channel
 SUMEI   RE15 RE0 2      # blue channel
 NOP
 
-SEQ RE9 RE13 process_red
-SEQ RE9 RE14 process_green
-SEQ RE9 RE15 end_process
+SEQ     RE9 RE13 process_red
+SEQ     RE9 RE14 process_green
+SEQ     RE9 RE15 process_blue
 
 
 
@@ -48,7 +48,12 @@ CRGE    RE15 RE15       # load red channel intensity
 NOP
 NOP
 
+SAL filter
 
+
+
+
+filter
 SUMEI   RE12 RE0 4079   # Building filter address
 SUMEI   RE14 RE0 6
 NOP
@@ -69,6 +74,8 @@ SEQ     RE12 RE14 load_custom_degraded_mask
 NOP
 NOP
 SAL     load_normal_degraded_mask
+
+
 
 
 process_green
@@ -95,37 +102,53 @@ SLE     RE15 RE15 RE14
 SUMEI   RE14 RE0 45
 NOP  
 NOP  
-SUMEE   RE15 RE15 RE14  # red channel intensity address
+SUMEE   RE15 RE15 RE14  # green channel intensity address
 NOP
 NOP
-CRGE    RE15 RE15       # load red channel intensity
+CRGE    RE15 RE15       # load green channel intensity
 NOP
 NOP
 
-SUMEI   RE12 RE0 4079   # Building filter address
+SAL filter
+
+
+
+
+process_blue
+SUMEI   RE5 RE0 317     # Building blue channel start address
+SUMEI   RE15 RE0 8
+NOP
+NOP
+SLE     RE5 RE5 RE15
+NOP
+NOP
+SUMEI   RE5 RE5 48      # Blue channel start address
+
+SUMEI   RE1 RE0 1649    # Building store start address
+SUMEI   RE15 RE0 7
+NOP
+NOP
+SLE     RE1 RE1 RE15
+NOP
+NOP
+SUMEI   RE1 RE1 28      # Result store start address
+
+SUMEI   RE15 RE0 4079   # Building blue channel intensity address
 SUMEI   RE14 RE0 6
 NOP
 NOP
-SLE     RE12 RE12 RE14
-SUMEI   RE14 RE0 48
+SLE     RE15 RE15 RE14
+SUMEI   RE14 RE0 46
 NOP  
 NOP  
-SUMEE   RE12 RE12 RE14  # Filter address
+SUMEE   RE15 RE15 RE14  # blue channel intensity address
 NOP
 NOP
-CRGE    RE12 RE12       # Load filter type 
+CRGE    RE15 RE15       # load blue channel intensity
+NOP
+NOP
 
-SUMEI   RE14 RE0 3      # Custom mask value
-NOP
-NOP
-SEQ     RE12 RE14 load_custom_degraded_mask
-NOP
-NOP
-SAL     load_normal_degraded_mask
-
-
-
-
+SAL filter
 
 select_filter
 SUMEI   RE12 RE0 4079   # Building filter address
@@ -160,6 +183,7 @@ SUMEI   RE14 RE0 3      # Custom filter value
 NOP
 NOP
 SEQ     RE12 RE14 hor_iterate_colums
+
 
 
 
