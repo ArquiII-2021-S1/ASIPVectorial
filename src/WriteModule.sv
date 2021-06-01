@@ -30,13 +30,34 @@ module WriteModule(clk,
     logic [A-1:0] v_address;
     
     // Calculate the write address
-    Counter #(A) cntr(clk, rst, counter);
+    // Counter #(A) cntr(clk, rst, counter);
+    Counter 
+    #(
+        .N (A )
+    )
+    u_Counter(
+    	.clk (clk ),
+        .rst (rst ),
+        .out (counter )
+    );
+    
     
     // Calculate vector write address
     assign v_address = counter + base_address;
     
-    // Vector item extraction
-    VectorItemExtractor #(I,L) vectorExtractor(vector_data, counter, v_item);
+     // Vector item extraction
+    VectorItemExtractor 
+    #(
+        .I (I ),
+        .L (L )
+    )
+    u_VectorItemExtractor(
+    	.address (counter[4:0] ),
+        .vector  (vector_data  ),
+        .item    (v_item    )
+    );
+    
+    // VectorItemExtractor #(I,L) vectorExtractor(vector_data, , v_item);
     
     // Selection between vector item and scalar data
     assign write_data = op_type ? v_item : scalar_data;
@@ -45,12 +66,27 @@ module WriteModule(clk,
     assign write_address = op_type ? v_address : base_address;
     
     // Finished signal
-    FinishedSignal #(A) finish(
-    .clk(clk),
-    .rst(rst),
-    .vector_max(6'd19),
-    .op_type(op_type),
-    .counter(counter),
-    .finished(finished));
+    // FinishedSignal #(A) finish(
+    // .clk(clk),
+    // .rst(rst),
+    // .vector_max(6'd19),
+    // .op_type(op_type),
+    // .counter(counter),
+    // .finished(finished));
+FinishedSignal 
+#(
+    .N (A )
+)
+u_FinishedSignal(
+    .clk        (clk        ),
+    .rst        (rst        ),
+    .op_type    (op_type    ),
+    .counter    (counter    ),
+    .vector_max (32'd19 ),
+    .finished   (finished   )
+);
+
+
+
     
 endmodule

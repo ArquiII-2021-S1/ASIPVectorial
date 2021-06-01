@@ -26,7 +26,7 @@ module ReadModule(clk,
     
     initial begin
         vector_data <= 0;
-        finished    <= 0;
+        // finished    <= 0;
     end
     
     /* Internal signals */
@@ -72,7 +72,7 @@ module ReadModule(clk,
     FinishedSignal #(A) finish(
     .clk(clk),
     .rst(rst),
-    .vector_max(6'd20),
+    .vector_max(32'd20),
     .op_type(op_type),
     .counter(counter),
     .finished(finished)

@@ -83,7 +83,7 @@ module MemStage(clk,
     /* ----------------------------------------------------------------------- */
     
     
-    WriteModule #(I,L,A) wrModule(
+    WriteModule #(.I(I),.L(L),.A(A)) wrModule(
     .clk(clk),
     .rst(rst),
     .op_type(op_type),
@@ -95,7 +95,7 @@ module MemStage(clk,
     .finished(wrFinished)
     );
     
-    Memory #(A,L) memory(
+    Memory #(.A(A),.L(L)) memory(
     .clk(~clk),
     .address(mem_address),
     .write_data(write_data),
@@ -103,7 +103,7 @@ module MemStage(clk,
     .read_data(read_data)
     );
     
-    ReadModule #(I,L,A) readModule(
+    ReadModule #(.I(I),.L(L),.A(A)) readModule(
     .clk(clk),
     .rst(rst),
     .op_type(op_type),
