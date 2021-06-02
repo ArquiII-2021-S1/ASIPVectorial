@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 import sys, getopt
 
 from numpy.lib.arraysetops import unique
+
+
+################################################## Populate ROM ################################################## 
 # Obtiene un arreglo de datos dado un archivo de entrada.
 def getPixelArrayFromDumpFile(filename):
     with open(filename, "r") as fileInput:
@@ -12,42 +15,13 @@ def getPixelArrayFromDumpFile(filename):
         for line in fileInput:
             lines.append(int(line.split(':')[1]))
     return lines
-
-
-
-def plotImage(pixelArray, rows,cols):
-    matrix = np.array(pixelArray).reshape(rows,cols)
-    plt.subplot()
-    plt.imshow(matrix)
-    print(len(matrix[0]))
-    print(matrix[0][0:10])
-    plt.savefig("./output/generated.png")
-    plt.show()
-    
-def show():
-    print("Mostrando el resultado")
-    channelRed = getPixelArrayFromFile("./input/dumpRed.txt") 
-    channelGreen = getPixelArrayFromFile("./input/dumpGreen.txt") 
-    channelBlue = getPixelArrayFromFile("./input/dumpBlue.txt")
-    unifiedImagePixels = []
-    for i in range (0, (200*200)):
-        #channelRed[i]/255,channelGreen[i]/255,channelBlue[i]/255)
-        pixel = (channelRed[i],channelGreen[i],channelBlue[i])
-        unifiedImagePixels.append( pixel )
-    print(unifiedImagePixels)
-    plotImage(unifiedImagePixels,200,200)
-
-################################################## Populate ROM ################################################## 
-
-
 # retorna un arreglo con los pixeles de la imagen [ [R, G, B] ]
+
 def getImagePixels(imageFile):
     image = Image.open(imageFile, "r")
     width, height = image.size
     pixels = list(image.getdata())
     return pixels
-
-
 
 # Escribe lineas de memoria
 def writeArrayToMif(file, startIndex, endIndex, array):
@@ -66,8 +40,7 @@ def getArrayFromFile(filename):
             lines.append(int(line))
     return lines
 
-
-def populateROM(imageFile, gradientFilename, customGradientFileName, filename1,filename2):
+def populateROM(imageFile, filename1,filename2):
     gradient25FileName = "./input/gradient-25.txt"
     gradient25Array = getArrayFromFile(gradient25FileName)
 
@@ -156,19 +129,15 @@ def populateROM(imageFile, gradientFilename, customGradientFileName, filename1,f
 
 def createImage( channelRed, channelGreen, channelBlue, width, height):
     pixels = []
-
-    #data = np.zeros((height, width, 3), dtype=np.uint8)
+    w, h = 200, 200
+    data = np.zeros((h, w, 3), dtype=np.uint8)
     index = 0
-    for h in range(0 , height):
-        row = []
-        for w in range(0 , width):
-            row.append([channelRed[index],channelGreen[index],channelBlue[index]])
-            index = index + 1
-        pixels.append(row)    
-    image = Image.fromarray(np.asarray(pixels), "RGB")
+    for h in range(0, height):
+        for w in range(0,width):
+            data[h,w]=[channelRed[index],channelGreen[index],channelBlue[index]]
+            index = index +1
+    image = Image.fromarray(data,"RGB")
     image.show()
-
-
 
 def extractPixelArray(filename):
     array = getImagePixels(filename)
@@ -180,11 +149,28 @@ def extractPixelArray(filename):
         channelRed.append(array[item][0]) # channel red
         channelGreen.append(array[item][1])  # channel green
         channelBlue.append(array[item][2]) # channel blue
-    createImage(channelRed, channelGreen, channelBlue, 7, 7)
+    createImage(channelRed, channelGreen, channelBlue, 200, 200)
+
+# g generate ROM files
+def main(argv):
+    opts, args = getopt.getopt(argv, "g:s:d:", ["generate", "show" , "debug"])
+    for opt, arg in opts:
+        if opt in ("-g", "--generate"):
+            populateROM(arg,"./output/rom1.mif","./output/rom2.mif")
+        elif opt in ("-s", "--show"):
+            channelRed = getPixelArrayFromDumpFile(arg)
+            channelGreen = getPixelArrayFromDumpFile(arg)
+            channelBlue = getPixelArrayFromDumpFile(arg)
+            createImage(channelRed, channelGreen, channelBlue, 200, 200)
+
+        elif opt in ("-d", "--debug"):
+            print(arg)
 
 
+if __name__ == "__main__":
+   main(sys.argv[1:])
 
 
-populateROM("./input/test.png", "./input/gradient.txt", "./input/customGradient.txt","./output/rom1.mif","./output/rom2.mif")
-extractPixelArray("./input/btimap.png")
+#populateROM("./input/test.png","./output/rom1.mif","./output/rom2.mif")
+#extractPixelArray("./input/test.png")
 
