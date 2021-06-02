@@ -277,12 +277,7 @@ Escribe el codigo compilado en un archivo .mif
 """
 def writeCodeMif():
     file = open("instructions.mif", "w")
-    header = """DEPTH = 4096; -- The size of memory in words
-    WIDTH = 32; -- The size of data in bits 
-    ADDRESEES_RADIX = DEC; -- The radix for addRESEEs values 
-    DATA_RADIX = BIN; -- The radix for data values 
-    CONTENT -- start of (addRESEEs : data pairs) 
-    BEGIN"""
+    header = """WIDTH=32;\nDEPTH=4096;\n\nADDRESS_RADIX=DEC;\nDATA_RADIX=BIN;\nCONTENT BEGIN"""
     file.write(header + "\n")
     for i in range(0, len(program)):
         file.write(str(i)+" : "+program[i] + ";\n")
