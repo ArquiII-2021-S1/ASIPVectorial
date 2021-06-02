@@ -457,7 +457,7 @@ module CPU (
       .mem_data     (MEM_data_out),  //para guardar el resultado a un txt
       .mem_finished (Mem_Finished_MEM)  // ready
   );
-assign temp_mem_finish = Mem_Finished_MEM||(~WBSelect_MEM);
+assign temp_mem_finish = Mem_Finished_MEM ||(~WBSelect_MEM);
 
 
 assign Data_Result_S_MEM=(OpSource_MEM)? AluResult_S_MEM:RD2_S_MEM;

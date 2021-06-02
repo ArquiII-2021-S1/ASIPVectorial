@@ -48,28 +48,28 @@ module DataMemoryManager #(
 
 
   RAM u_RAM0 (
-      .address(address_i[15:0]),
+      .address(address_i),
       .clock  (CLK_ng),
       .data   (data_i),
       .wren   (wren[0]),
       .q      (data_image[0])
   );
   RAM u_RAM1 (
-      .address(address_i[15:0]),
+      .address(address_i),
       .clock  (CLK_ng),
       .data   (data_i),
       .wren   (wren[1]),
       .q      (data_image[1])
   );
   RAM u_RAM2 (
-      .address(address_i[15:0]),
+      .address(address_i),
       .clock  (CLK_ng),
       .data   (data_i),
       .wren   (wren[2]),
       .q      (data_image[2])
   );
   RAM u_RAM3 (
-      .address(address_i[15:0]),
+      .address(address_i),
       .clock  (CLK_ng),
       .data   (data_i),
       .wren   (wren[3]),

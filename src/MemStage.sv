@@ -113,7 +113,7 @@ u_DataMemoryManager (
       .CLK      (clk),
       .wren_i   (wrEnable),
       .button_i (),
-      .data_o   (),
+      .data_o   (read_data),
       .LEDs_o   ()
   );
 
@@ -148,7 +148,7 @@ u_DataMemoryManager (
   /* ----------------------------------------------------------------------- */
 
   // Finish read/write signal
-  assign mem_finished = (~write_enable && rdFinished) || (write_enable && wrFinished);
+  assign mem_finished = ((~write_enable) && rdFinished) || (write_enable && wrFinished);
 //   || (op_type == 2'b00)
 
   // Output data from the memory

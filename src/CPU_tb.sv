@@ -159,8 +159,8 @@ end
 
 initial
 begin
-f_img_out = $fopen("IMG_OUT.txt","w");
-f_data_out = $fopen("DATA_OUT.txt","w");
+//f_img_out = $fopen("IMG_OUT.txt","w");
+//f_data_out = $fopen("DATA_OUT.txt","w");
 
 CLK=0;
 #1;
