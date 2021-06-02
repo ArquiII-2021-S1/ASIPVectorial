@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import sys, getopt
 
 from numpy.lib.arraysetops import unique
+from numpy.lib.function_base import append
 
 
 ################################################## Populate ROM ################################################## 
@@ -14,7 +15,7 @@ def getDicFrom(filename):
     with open(filename, "r") as fileInput:
         for line in fileInput:
             [address,value] = line.split(':')
-            dic[address]=int(value)
+            dic[int(address)]=int(value)
     return dic
 
 def getPixelArrayFromDumpFile(filename):
@@ -166,13 +167,22 @@ def main(argv):
         if opt in ("-g", "--generate"):
             populateROM(arg,"./output/rom1.mif","./output/rom2.mif")
         elif opt in ("-s", "--show"):
+
             dic = getDicFrom(arg)
-            
+            pixels = []
+            for i in range(0,300000):
+                if(i in dic.keys()):
+                    pixels.append(dic[i])
+                else:
+                    pixels.append(0)
+
             values = list(dic.values()) + list(np.zeros((91,), dtype=int))
             print(len(values))
-            channelRed = values[0:40000]
-            channelGreen = values[40000:80000]
-            channelBlue = values[80000:120000]
+            channelRed = pixels[131100:171100]
+            channelGreen = pixels[171100:211100]
+            channelBlue = pixels[211100:251100]
+
+
             print(len(channelRed),len(channelGreen), len(channelBlue))
             createImage(channelRed, channelGreen, channelBlue, 200, 200)
         elif opt in ("-h", "--help"):
