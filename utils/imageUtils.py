@@ -15,7 +15,7 @@ def getDicFrom(filename):
     dic = {}
     with open(filename, "r") as fileInput:
         for line in fileInput:
-            [address,value] = line.split(':')
+            [address,value] = line.replace(" ", "").split(':')
             if((int(address) not in dic.keys()) & (int(value) != 0)  ):
                 dic[int(address)]=int(value)
     return dic
