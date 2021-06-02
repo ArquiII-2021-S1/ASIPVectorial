@@ -47,14 +47,14 @@ module DataMemoryManager #(
 
 
 
-  RAM u_RAM0 (
+  RAM_IMG1 u_RAM0 (
       .address(address_i),
       .clock  (CLK_ng),
       .data   (data_i),
       .wren   (wren[0]),
       .q      (data_image[0])
   );
-  RAM u_RAM1 (
+  RAM_IMG2 u_RAM1 (
       .address(address_i),
       .clock  (CLK_ng),
       .data   (data_i),

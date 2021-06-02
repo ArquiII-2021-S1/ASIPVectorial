@@ -10,7 +10,7 @@ module Counter (
 
   // Initial value, in the next cycle it will be zero
   logic [N-1:0] qc = {N{1'b1}};
-
+//  always @(posedge clk) begin
   always @(posedge clk or posedge rst) begin
     if (rst == 0) begin
       qc <= qc + 1;
