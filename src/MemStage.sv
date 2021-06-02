@@ -12,7 +12,8 @@ module MemStage (
     scalar_output,
     vector_output,
     mem_finished,
-    mem_data
+    mem_data,
+    mem_address_o
 );
   /* Arguments
      - clk:            system clock
@@ -48,6 +49,7 @@ module MemStage (
   output logic [I-1:0][L-1:0] vector_output;
   output logic [L-1:0] scalar_output, mem_data;
   output logic mem_finished;
+  output logic [A-1:0]    mem_address_o    ;
   /* ----------------------------------------------------------------------- */
 
   /* WriteModule signals */
@@ -82,6 +84,7 @@ module MemStage (
   logic [A-1:0] mem_address;
   assign mem_address = write_enable ? write_address : read_address;
 
+  assign mem_address_o = mem_address;
 
   /* ----------------------------------------------------------------------- */
 

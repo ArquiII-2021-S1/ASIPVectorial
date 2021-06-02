@@ -1,19 +1,29 @@
-SUMEI   RE1 RE0 0   
-SUMEI   RE2 RE0 20 
-SUMEI   RE11 RE0 1000 
-hor_iterate_colums
-SUMEI   RE1 RE1 1  
 NOP
 NOP
-SEQ RE1 RE2 end_code
-SUMEI   RE11 RE11 1 
-NOP
-SUMEI   RE10 RE10 20    # j = j + 20
+
+SUMEI   RE1 RE0 200
 NOP
 NOP
-SAL     hor_iterate_colums
-SUMEI   RE7 RE0 99 
+CRGV    RV1 RE1
 NOP
 NOP
-end_code
-SUMEI   RE5 RE0 55
+SAL test
+
+SUMEI   RE2 RE0 1
+SUMEI   RE3 RE0 2 
+SAL end
+
+test
+SUMEI   RE15 RE0 400
+CRGV    RV1 RE1
+NOP
+NOP
+SEQ RE0 RE0 end
+SUMEI   RE14 RE0 450
+
+
+
+end
+NOP
+NOP
+SAL end

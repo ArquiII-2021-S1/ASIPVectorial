@@ -25,9 +25,9 @@ CPU cpu (
 							.inst_mem_data_i(), 
 							.inst_mem_address_o(), 
 							.data_mem_out_data_i(), 
-							.data_mem_address_o(),
-							.data_mem_in_data_o(), 
-							.data_mem_WE_o());
+							.data_mem_address_o(data_mem_address),
+							.data_mem_in_data_o(data_mem_in_data), 
+							.data_mem_WE_o(data_mem_WE));
 
 
 // Inst_ROM instROM (
@@ -124,20 +124,21 @@ begin
 	begin
 			$display("PC:inst_mem_address: %d, data_mem_address: %d, data_mem_in_data: %d", 
 					  inst_mem_address,data_mem_address, data_mem_in_data);
-			if(data_mem_address>=32'd262144)
-			begin
-				$display("Imagen Salida");
-				pos=data_mem_address-32'd262144;
+			// if(data_mem_address>=32'd262144)
+			// begin
+				// $display("Imagen Salida");
+				// pos=data_mem_address-32'd262144;
+				pos=data_mem_address;
 //				$fwrite(f_img_out,"%d ",data_mem_in_data);
 				$fwrite(f_img_out,"%d : %d\n",pos ,data_mem_in_data  );
 
-			end
-			else if(data_mem_address<=32'd4095)
-			begin
-				$display("Datos");
-				pos=data_mem_address;
-				$fwrite(f_data_out,"%d : %d\n",pos ,data_mem_in_data  );
-			end			
+			// end
+			// else if(data_mem_address<=32'd4095)
+			// begin
+			// 	$display("Datos");
+			// 	pos=data_mem_address;
+			// 	$fwrite(f_data_out,"%d : %d\n",pos ,data_mem_in_data  );
+			// end			
 			
 	end
 end
@@ -159,8 +160,8 @@ end
 
 initial
 begin
-//f_img_out = $fopen("IMG_OUT.txt","w");
-//f_data_out = $fopen("DATA_OUT.txt","w");
+f_img_out = $fopen("IMG_OUT.txt","w");
+f_data_out = $fopen("DATA_OUT.txt","w");
 
 CLK=0;
 #1;

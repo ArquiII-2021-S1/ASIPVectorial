@@ -459,9 +459,15 @@ module CPU (
       .rd2_sca      (RD2_S_MEM[7:0]),
       .vector_output(Data_Mem_V_MEM),
       .scalar_output(Data_Mem_S_MEM[7:0]),
+    //   .mem_data     (MEM_data_out),  //para guardar el resultado a un txt
       .mem_data     (MEM_data_out),  //para guardar el resultado a un txt
-      .mem_finished (Mem_Finished_MEM)  // ready
+      .mem_finished (Mem_Finished_MEM),  // ready
+      .mem_address_o(data_mem_address_o)
   );
+
+assign data_mem_WE_o = MemWE_MEM;
+assign data_mem_in_data_o = {24'b0,MEM_data_out};
+
 assign temp_mem_finish = Mem_Finished_MEM ||(~WBSelect_MEM);
 
 

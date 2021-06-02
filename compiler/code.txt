@@ -2,7 +2,82 @@ NOP
 NOP
 NOP
 
-SUMEI   RE2 RE0 2      # Alpha value
+
+SUMEI   RE15 RE0 4079   # Building buttons address
+SUMEI   RE14 RE0 6
+NOP
+NOP
+SLE     RE15 RE15 RE14
+NOP
+NOP
+
+SUMEI   RE15 RE15 44      # First button address
+NOP
+NOP
+SUMEI   RE14 RE0 1          # Red channel intensity
+NOP
+NOP
+ALME    RE15 RE14
+
+
+SUMEI   RE15 RE15 1      
+SUMEI   RE14 RE0 2          # Blue channel intensity
+NOP
+NOP
+ALME    RE15 RE14
+
+
+SUMEI   RE15 RE15 1      
+SUMEI   RE14 RE0 0          # Green channel intensity
+NOP
+NOP
+ALME    RE15 RE14
+
+
+SUMEI   RE15 RE15 1      
+SUMEI   RE14 RE0 2          # Alpha value
+NOP
+NOP
+ALME    RE15 RE14
+
+
+SUMEI   RE15 RE15 1      
+SUMEI   RE14 RE0 1          # Filter type
+NOP
+NOP
+ALME    RE15 RE14
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SUMEI   RE15 RE0 4079   # Building buttons address
+SUMEI   RE14 RE0 6
+NOP
+NOP
+SLE     RE15 RE15 RE14
+NOP
+NOP
+SUMEI   RE15 RE15 47    # Alpha address
+NOP
+NOP
+CRGE    RE2 RE15        # Load alpha value
+
+
 
 
 SUMEI   RE9 RE0 0       # k start value
@@ -22,7 +97,7 @@ NOP
 
 SEQ     RE9 RE0  process_red
 SEQ     RE9 RE14 process_green
-SAL     RE9 RE15 process_blue
+SAL     process_blue
 
 
 
@@ -52,6 +127,8 @@ NOP
 CRGE    RE15 RE15       # load red channel intensity
 NOP
 NOP
+NOP
+NOP
 
 SAL filter
 
@@ -72,6 +149,8 @@ NOP
 NOP
 
 CRGE    RE12 RE12       # Load filter type 
+NOP
+NOP
 SUMEI   RE14 RE0 3      # Custom mask value
 NOP
 NOP
@@ -113,6 +192,8 @@ NOP
 CRGE    RE15 RE15       # load green channel intensity
 NOP
 NOP
+NOP
+NOP
 
 SAL filter
 
@@ -152,6 +233,8 @@ NOP
 CRGE    RE15 RE15       # load blue channel intensity
 NOP
 NOP
+NOP
+NOP
 
 SAL filter
 
@@ -172,6 +255,8 @@ NOP
 NOP
 
 CRGE    RE12 RE12       # Load filter type 
+NOP
+NOP
 SUMEI   RE14 RE0 0      # Horizontal filter value
 NOP
 NOP
@@ -212,20 +297,20 @@ NOP
 SEQ     RE15 RE14 custom_degraded_75
 
 NOP     # 100% intensity
-SAL     RE15 RE14 custom_degraded_100
+SAL     custom_degraded_100
 
 
 custom_degraded_25
 SUMEI   RE3 RE0 600     # 25% intensity
-SAL select_filter
+SAL     select_filter
 
 custom_degraded_75
 SUMEI   RE3 RE0 800     # 75% intensity
-SAL select_filter
+SAL     select_filter
 
 custom_degraded_100
 SUMEI   RE3 RE0 1000    # 100% intensity
-SAL select_filter
+SAL     select_filter
 
 
 
@@ -248,7 +333,7 @@ NOP
 SEQ     RE15 RE14 normal_degraded_75
 
 NOP     # 100% intensity
-SAL     RE15 RE14 normal_degraded_100
+SAL     normal_degraded_100
 
 
 zero_degraded
@@ -257,19 +342,19 @@ SUMEI   RE14 RE0 4
 NOP
 NOP
 SLE     RE3 RE3 RE14    # Mask start address
-SAL select_filter
+SAL     select_filter
 
 normal_degraded_25
 SUMEI   RE3 RE0 0       # Mask start address
-SAL select_filter
+SAL     select_filter
 
 normal_degraded_75
 SUMEI   RE3 RE0 200     # Mask start address
-SAL select_filter
+SAL     select_filter
 
 normal_degraded_100
 SUMEI   RE3 RE0 400     # Mask start address
-SAL select_filter
+SAL     select_filter
 
 
 
@@ -285,22 +370,29 @@ SUMEE   RE15 RE3 RE10   # RE15 = mask_start_address + j
 SUMEE   RE6 RE1 RE10    # store_address = store_start_address + j
 SUMEE   RE8 RE5 RE10    # row_start_address = row_start_address + j
 CRGV    RV1 RE15        # Load mask section
+NOP
+NOP
 SUMEI   RE13 RE0 11     # Indicate horizontal operation
 
 
 hor_iterate_rows
 SEQ     RE11 RE7 hor_end_iterate_rows      
 CRGV    RV2 RE8         # Load row section
+NOP
+NOP
+NOP
 
-SAL  alpha_composition
+SAL     alpha_composition
 
 hor_continue_iterate_rows
 SUMEI   RE11 RE11 1     # Increment i counter by 1
 SUMEI   RE8 RE8 200     # Increment address by 200 to read the next row
 ALMV    RE6 RV3         # Store result section
+NOP
+NOP
 SUMEI   RE6 RE6 200     # Increment store counter by 200
 
-SAL hor_iterate_rows
+SAL     hor_iterate_rows
 
 hor_end_iterate_rows
 SUMEI   RE10 RE10 20    # j = j + 20
@@ -316,7 +408,7 @@ hor_end_iterate_colums
 SUMEI   RE9 RE9 1       # k = k + 1
 NOP
 NOP
-SAL  iterate_channels
+SAL     iterate_channels
 
 
 
@@ -333,6 +425,9 @@ SUMEI   RE13 RE0 10     # Indicate vertical operation
 CRGE    RE14 RE15       # Load mask value
 NOP
 NOP
+
+NOP
+NOP
 SUMEV   RV1 RV0 RE14    # Vectorize mask value
 NOP
 NOP
@@ -340,6 +435,9 @@ NOP
 ver_iterate_colums
 SEQ     RE10 RE7 ver_end_iterate_columns
 CRGV    RV2 RE8         # Load row section
+NOP
+NOP
+NOP
 
 SAL alpha_composition
 
@@ -347,9 +445,12 @@ ver_continue_iterate_colums
 SUMEI   RE10 RE10 20     # Increment j counter by 1
 SUMEI   RE8 RE8 20      # Increment address by 20 to read the next column
 ALMV    RE6 RV3         # Store result section
+NOP
+NOP
+NOP
 SUMEI   RE6 RE6 20      # store_address = store_address + 20
 
-SAL ver_iterate_colums
+SAL     ver_iterate_colums
 
 
 ver_end_iterate_columns
@@ -441,7 +542,7 @@ NOP
 SUMVV   RV3 RV6 RV5
 NOP
 NOP
-SAL end_alpha_composition
+SAL     end_alpha_composition
 
 
 end_alpha_composition
@@ -457,4 +558,5 @@ SAL     hor_continue_iterate_rows
 
 
 end_process
+NOP
 NOP
