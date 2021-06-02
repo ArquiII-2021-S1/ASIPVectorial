@@ -5,63 +5,14 @@ import matplotlib.pyplot as plt
 import sys, getopt
 
 from numpy.lib.arraysetops import unique
-
+# Obtiene un arreglo de datos dado un archivo de entrada.
 def getPixelArrayFromDumpFile(filename):
-    #fileInput = open(filename, "r")
     with open(filename, "r") as fileInput:
         lines = []
         for line in fileInput:
-            #print(line.split(':')[1])
             lines.append(int(line.split(':')[1]))
     return lines
 
-
-
-def writeImageMif(fileName, pixels):
-    # filename: "red.mif"
-    # filename: "green.mif"
-    # filename: "blue.mif"
-    depth = 2 ** 16
-    file = open(fileName, "w")
-    header = """DEPTH = {}; -- The size of memory in words
-    WIDTH = 8; -- The size of data in bits
-    ADDRESS_RADIX = DEC; -- The radix for address values
-    DATA_RADIX = DEC; -- The radix for data values
-    CONTENT -- start of (address : data pairs)
-    BEGIN \n""".format(
-        depth
-    )
-    file.write(header + "\n")
-    for i in range(0, depth):
-        if i < len(pixels):
-            file.write(str(i) + " : " + str(pixels[i]) + ";\n")
-        else:
-            file.write(str(i) + " : " + str(0) + ";\n")
-
-    file.write("END;" + "\n")
-    print(""" Archivo generado {filename}""".format(filename = fileName))
-
-
-
-def generateMifChannels(filename):
-    image = Image.open(filename, "r")
-    width, height = image.size
-    pixels = list(image.getdata())
-
-    channelRed = []
-    channelGreen = []
-    channelBlue = []
-    for item in range(0, len(pixels) ):
-        channelRed.append(pixels[item][0]) # channel red
-        channelGreen.append(pixels[item][1])  # channel green
-        channelBlue.append(pixels[item][2]) # channel blue
-    print("\033[91m")
-    writeImageMif("./output/red.mif", channelRed)
-    print("\033[92m")
-    writeImageMif("./output/green.mif", channelGreen)
-    print("\033[96m")
-    writeImageMif("./output/blue.mif", channelBlue)
-    print("\033[0m")
 
 
 def plotImage(pixelArray, rows,cols):
@@ -86,15 +37,19 @@ def show():
     print(unifiedImagePixels)
     plotImage(unifiedImagePixels,200,200)
 
-##################################################3
+################################################## Populate ROM ################################################## 
 
 
+# retorna un arreglo con los pixeles de la imagen [ [R, G, B] ]
 def getImagePixels(imageFile):
     image = Image.open(imageFile, "r")
     width, height = image.size
     pixels = list(image.getdata())
     return pixels
 
+
+
+# Escribe lineas de memoria
 def writeArrayToMif(file, startIndex, endIndex, array):
     index = 0
     for i in range (startIndex , endIndex): # starIndex ---> endIndex-1
@@ -199,67 +154,37 @@ def populateROM(imageFile, gradientFilename, customGradientFileName, filename1,f
 
     filePart2.write("END;" + "\n")
 
+def createImage( channelRed, channelGreen, channelBlue, width, height):
+    pixels = []
 
-def populateRAM(filename1,filename2):
-    depth = 2 ** 16
-    fileRAMPart1 = open(filename1, "w")
-    header = """DEPTH = {}; -- The size of memory in words
-    WIDTH = 8; -- The size of data in bits
-    ADDRESS_RADIX = DEC; -- The radix for address values
-    DATA_RADIX = DEC; -- The radix for data values
-    CONTENT -- start of (address : data pairs)
-    BEGIN \n""".format(
-        depth
-    )
-    fileRAMPart1.write(header + "\n")
-    #Intensidad del rojo
-    fileRAMPart1.write(str(261100) + " : " + str(0) + ";\n")
+    #data = np.zeros((height, width, 3), dtype=np.uint8)
+    index = 0
+    for h in range(0 , height):
+        row = []
+        for w in range(0 , width):
+            row.append([channelRed[index],channelGreen[index],channelBlue[index]])
+            index = index + 1
+        pixels.append(row)    
+    image = Image.fromarray(np.asarray(pixels), "RGB")
+    image.show()
 
-    #Intensidad del azul
-    fileRAMPart1.write(str(261101) + " : " + str(0) + ";\n")
-    
-    #Intensidad del verde
-    fileRAMPart1.write(str(261102) + " : " + str(0) + ";\n")
 
-    #Transparencia del degradado
-    fileRAMPart1.write(str(261103) + " : " + str(0) + ";\n")
 
-    # Filtro
-    fileRAMPart1.write(str(261104) + " : " + str(0) + ";\n")
-    
-    
-    # Imagen filtrada canal rojo 40 000 espacios
-    writeArrayToMif(fileRAMPart1,131100,171099,np.zeros((40000,), dtype=int))
+def extractPixelArray(filename):
+    array = getImagePixels(filename)
+    channelRed = []
+    channelGreen = []
+    channelBlue = []
+    for item in range(0, len(array) ):
 
-    # Imagen filtrada canal verde 40 000 espacios 25531 para este archivo
-    writeArrayToMif(fileRAMPart1,171099,196630,np.zeros((25531,), dtype=int))
-
-    fileRAMPart1.write("END;" + "\n")
-
-    fileRAMPart2 = open(filename2, "w")
-    header = """DEPTH = {}; -- The size of memory in words
-    WIDTH = 8; -- The size of data in bits
-    ADDRESS_RADIX = DEC; -- The radix for address values
-    DATA_RADIX = DEC; -- The radix for data values
-    CONTENT -- start of (address : data pairs)
-    BEGIN \n""".format(
-        depth
-    )
-    fileRAMPart2.write(header + "\n")
-
-    # Imagen filtrada canal verde 14469 espacios restantes
-    writeArrayToMif(fileRAMPart2,196630,211100,np.zeros((25531,), dtype=int))
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-    # Imagen filtrada canal azul 40 000 espacios
-    writeArrayToMif(fileRAMPart2,211100,251100,np.zeros((40000,), dtype=int))
-
-    
-    writeArrayToMif(fileRAMPart2,251100,262167,np.zeros((11067,), dtype=int))
-    
-    fileRAMPart2.write("END;" + "\n")
+        channelRed.append(array[item][0]) # channel red
+        channelGreen.append(array[item][1])  # channel green
+        channelBlue.append(array[item][2]) # channel blue
+    createImage(channelRed, channelGreen, channelBlue, 200, 200)
 
 
 
 
 populateROM("./input/test.png", "./input/gradient.txt", "./input/customGradient.txt","./output/rom1.mif","./output/rom2.mif")
-populateRAM("./output/ram1.mif","./output/ram2.mif")
+extractPixelArray("./input/test.png")
+
