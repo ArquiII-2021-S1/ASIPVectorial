@@ -1,0 +1,455 @@
+SUMEI   RE2 RE0 2      # Alpha value
+
+
+SUMEI   RE9 RE0 0       # k start value
+SUMEI   RE7 RE0 200     # Loop limit    
+
+
+
+iterate_channels
+SUMEI   RE15 RE0 3      # k max value
+SUMEI   RE10 RE0 0      # j start value
+SUMEI   RE11 RE0 0      # i start value
+SUMEI   RE6 RE0 0
+SEQ     RE9 RE15 end_process
+SUMEI   RE14 RE0 1      # green channel
+NOP
+
+SEQ     RE9 RE0  process_red
+SEQ     RE9 RE14 process_green
+SAL     RE9 RE15 process_blue
+
+
+
+
+process_red
+SUMEI   RE5 RE0 1200    # Red channel start address
+SUMEI   RE1 RE0 1
+SUMEI   RE15 RE0 17
+NOP
+NOP
+SLE     RE1 RE1 RE15
+NOP
+NOP
+SUMEI   RE1 RE1 28      # Result store start address
+
+SUMEI   RE15 RE0 4079   # Building red channel intensity address
+SUMEI   RE14 RE0 6
+NOP
+NOP
+SLE     RE15 RE15 RE14
+SUMEI   RE14 RE0 44
+NOP  
+NOP  
+SUMEE   RE15 RE15 RE14  # red channel intensity address
+NOP
+NOP
+CRGE    RE15 RE15       # load red channel intensity
+NOP
+NOP
+
+SAL filter
+
+
+
+
+filter
+SUMEI   RE12 RE0 4079   # Building filter address
+SUMEI   RE14 RE0 6
+NOP
+NOP
+SLE     RE12 RE12 RE14
+SUMEI   RE14 RE0 48
+NOP  
+NOP  
+SUMEE   RE12 RE12 RE14  # Filter address
+NOP
+NOP
+
+CRGE    RE12 RE12       # Load filter type 
+SUMEI   RE14 RE0 3      # Custom mask value
+NOP
+NOP
+SEQ     RE12 RE14 load_custom_degraded_mask
+NOP
+NOP
+SAL     load_normal_degraded_mask
+
+
+
+
+process_green
+SUMEI   RE5 RE0 2575    # Building green channel start address
+SUMEI   RE15 RE0 4
+NOP
+NOP
+SLE     RE5 RE5 RE15    # Green channel start address
+
+SUMEI   RE1 RE0 1336    # Building store start address
+SUMEI   RE15 RE0 7
+NOP
+NOP
+SLE     RE1 RE1 RE15
+NOP
+NOP
+SUMEI   RE1 RE1 92      # Result store start address
+
+SUMEI   RE15 RE0 4079   # Building green channel intensity address
+SUMEI   RE14 RE0 6
+NOP
+NOP
+SLE     RE15 RE15 RE14
+SUMEI   RE14 RE0 45
+NOP  
+NOP  
+SUMEE   RE15 RE15 RE14  # green channel intensity address
+NOP
+NOP
+CRGE    RE15 RE15       # load green channel intensity
+NOP
+NOP
+
+SAL filter
+
+
+
+
+process_blue
+SUMEI   RE5 RE0 317     # Building blue channel start address
+SUMEI   RE15 RE0 8
+NOP
+NOP
+SLE     RE5 RE5 RE15
+NOP
+NOP
+SUMEI   RE5 RE5 48      # Blue channel start address
+
+SUMEI   RE1 RE0 1649    # Building store start address
+SUMEI   RE15 RE0 7
+NOP
+NOP
+SLE     RE1 RE1 RE15
+NOP
+NOP
+SUMEI   RE1 RE1 28      # Result store start address
+
+SUMEI   RE15 RE0 4079   # Building blue channel intensity address
+SUMEI   RE14 RE0 6
+NOP
+NOP
+SLE     RE15 RE15 RE14
+SUMEI   RE14 RE0 46
+NOP  
+NOP  
+SUMEE   RE15 RE15 RE14  # blue channel intensity address
+NOP
+NOP
+CRGE    RE15 RE15       # load blue channel intensity
+NOP
+NOP
+
+SAL filter
+
+
+
+
+select_filter
+SUMEI   RE12 RE0 4079   # Building filter address
+SUMEI   RE14 RE0 6
+NOP
+NOP
+SLE     RE12 RE12 RE14
+SUMEI   RE14 RE0 48
+NOP  
+NOP  
+SUMEE   RE12 RE12 RE14  # Filter address
+NOP
+NOP
+
+CRGE    RE12 RE12       # Load filter type 
+SUMEI   RE14 RE0 0      # Horizontal filter value
+NOP
+NOP
+SEQ     RE12 RE14 hor_iterate_colums
+
+SUMEI   RE14 RE0 1      # Vertical filter value
+NOP
+NOP
+SEQ     RE12 RE14 ver_iterate_rows_aux
+
+SUMEI   RE14 RE0 2      # Diagonal filter value
+NOP
+NOP
+SEQ     RE12 RE14 dia_iterate_colums
+
+SUMEI   RE14 RE0 3      # Custom filter value
+NOP
+NOP
+SEQ     RE12 RE14 hor_iterate_colums
+
+
+
+
+load_custom_degraded_mask
+SUMEI   RE14 RE0 0      # 0% intensity
+NOP
+NOP
+SEQ     RE15 RE14       zero_degraded
+
+SUMEI   RE14 RE0 1      # 25% intensity
+NOP
+NOP
+SEQ     RE15 RE14 custom_degraded_25
+
+SUMEI   RE14 RE0 2      # 75% intensity
+NOP
+NOP
+SEQ     RE15 RE14 custom_degraded_75
+
+NOP     # 100% intensity
+SAL     RE15 RE14 custom_degraded_100
+
+
+custom_degraded_25
+SUMEI   RE3 RE0 600     # 25% intensity
+SAL select_filter
+
+custom_degraded_75
+SUMEI   RE3 RE0 800     # 75% intensity
+SAL select_filter
+
+custom_degraded_100
+SUMEI   RE3 RE0 1000    # 100% intensity
+SAL select_filter
+
+
+
+
+
+load_normal_degraded_mask
+SUMEI   RE14 RE0 0      # 0% intensity
+NOP
+NOP
+SEQ     RE15 RE14       zero_degraded
+
+SUMEI   RE14 RE0 1      # 25% intensity
+NOP
+NOP
+SEQ     RE15 RE14 normal_degraded_25
+
+SUMEI   RE14 RE0 2      # 75% intensity
+NOP
+NOP
+SEQ     RE15 RE14 normal_degraded_75
+
+NOP     # 100% intensity
+SAL     RE15 RE14 normal_degraded_100
+
+
+zero_degraded
+SUMEI   RE3 RE0 7575
+SUMEI   RE14 RE0 4
+NOP
+NOP
+SLE     RE3 RE3 RE14    # Mask start address
+SAL select_filter
+
+normal_degraded_25
+SUMEI   RE3 RE0 0       # Mask start address
+SAL select_filter
+
+normal_degraded_75
+SUMEI   RE3 RE0 200     # Mask start address
+SAL select_filter
+
+normal_degraded_100
+SUMEI   RE3 RE0 400     # Mask start address
+SAL select_filter
+
+
+
+
+
+
+
+hor_iterate_colums
+SEQ     RE10 RE7 hor_end_iterate_colums
+SUMEI   RE11 RE0 0      # i start value
+NOP
+SUMEE   RE15 RE3 RE10   # RE15 = mask_start_address + j
+SUMEE   RE6 RE1 RE10    # store_address = store_start_address + j
+SUMEE   RE8 RE5 RE10    # row_start_address = row_start_address + j
+CRGV    RV1 RE15        # Load mask section
+SUMEI   RE13 RE0 11     # Indicate horizontal operation
+
+
+hor_iterate_rows
+SEQ     RE11 RE7 hor_end_iterate_rows      
+CRGV    RV2 RE8         # Load row section
+
+SAL  alpha_composition
+
+hor_continue_iterate_rows
+SUMEI   RE11 RE11 1     # Increment i counter by 1
+SUMEI   RE8 RE8 200     # Increment address by 200 to read the next row
+ALMV    RE6 RV3         # Store result section
+SUMEI   RE6 RE6 200     # Increment store counter by 200
+
+SAL hor_iterate_rows
+
+hor_end_iterate_rows
+SUMEI   RE10 RE10 20    # j = j + 20
+NOP
+NOP
+SAL     hor_iterate_colums
+
+
+
+
+ver_end_iterate_rows
+hor_end_iterate_colums
+SUMEI   RE9 RE9 1       # k = k + 1
+NOP
+NOP
+SAL  iterate_channels
+
+
+
+
+ver_iterate_rows_aux
+SUMEE   RE6 RE0 RE1
+
+ver_iterate_rows
+SEQ     RE11 RE7 ver_end_iterate_rows
+SUMEI   RE10 RE0 0      # j start value
+SUMEE   RE15 RE3 RE11   # RE15 = mask_start_address + i
+SUMEE   RE8 RE0 RE5     # Copy row_start_address into RE8 
+SUMEI   RE13 RE0 10     # Indicate vertical operation
+CRGE    RE14 RE15       # Load mask value
+NOP
+NOP
+SUMEV   RV1 RV0 RE14    # Vectorize mask value
+NOP
+NOP
+
+ver_iterate_colums
+SEQ     RE10 RE7 ver_end_iterate_columns
+CRGV    RV2 RE8         # Load row section
+
+SAL alpha_composition
+
+ver_continue_iterate_colums
+SUMEI   RE10 RE10 20     # Increment j counter by 1
+SUMEI   RE8 RE8 20      # Increment address by 20 to read the next column
+ALMV    RE6 RV3         # Store result section
+SUMEI   RE6 RE6 20      # store_address = store_address + 20
+
+SAL ver_iterate_colums
+
+
+ver_end_iterate_columns
+SUMEI   RE15 RE0 200
+SUMEI   RE11 RE11 1     # i = i + 1
+NOP
+SUMEE   RE5 RE5 RE15    # row_start_address = row_start_address + 200
+SAL     ver_iterate_rows
+
+
+
+
+dia_iterate_colums
+
+SEQ     RE9 RE0 hor_iterate_colums
+SUMEI   RE15 RE0 1
+NOP
+NOP
+SEQ     RE9 RE15 ver_iterate_rows_aux     
+NOP
+NOP
+
+
+SUMEI   RE3 RE0 7575    # Building zero mask address
+SUMEI   RE14 RE0 4
+NOP
+NOP
+SLE     RE3 RE3 RE14    # Zero mask start address
+SAL     hor_iterate_colums
+
+
+
+
+alpha_composition
+SUMEI   RE12 RE0 1
+SUMEI   RE14 RE0 1
+SUMEI   RE15 RE0 2
+
+SEQ     RE2 RE0  alpha_zero
+SEQ     RE2 RE14 alpha_one
+SEQ     RE2 RE15 alpha_two
+SAL     alpha_three
+
+alpha_zero
+SUMVV   RV3 RV0 RV2
+NOP
+NOP
+SAL     end_alpha_composition
+
+alpha_three
+SUMVV   RV3 RV0 RV1
+NOP
+NOP
+SAL     end_alpha_composition
+
+alpha_one
+SRV     RV4 RV1 RE12
+NOP
+NOP
+SRV     RV4 RV4 RE12
+SRV     RV7 RV2 RE12
+NOP
+NOP
+SRV     RV6 RV7 RE12
+NOP
+NOP
+SUMVV   RV3 RV6 RV7
+NOP
+NOP
+SUMVV   RV3 RV4 RV3
+NOP
+NOP
+SAL     end_alpha_composition  
+
+alpha_two
+SRV     RV7 RV1 RE12
+NOP
+NOP
+SRV     RV6 RV7 RE12
+NOP
+NOP
+SUMVV   RV6 RV6 RV7
+SRV     RV5 RV2 RE12
+NOP
+NOP
+SRV     RV5 RV5 RE12
+NOP
+NOP
+SUMVV   RV3 RV6 RV5
+NOP
+NOP
+SAL end_alpha_composition
+
+
+end_alpha_composition
+SUMEI   RE15 RE0 10     # Vertical operation
+NOP
+NOP
+SEQ     RE13 RE15 ver_continue_iterate_colums
+NOP
+NOP
+SAL     hor_continue_iterate_rows
+
+
+
+
+end_process
+NOP

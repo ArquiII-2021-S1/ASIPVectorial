@@ -16,3 +16,7 @@ simulation/
 work/
 
 greybox_tmp/
+
+*/__pycache__/
+
+*.qws
