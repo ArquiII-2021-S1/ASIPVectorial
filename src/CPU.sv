@@ -13,14 +13,18 @@ module CPU (
   output logic [31:0] data_mem_in_data_o, data_mem_address_o, inst_mem_address_o;
   output logic data_mem_WE_o;
 
-  parameter N = 32, L = 1, V = 1, A = 1;
+  parameter N = 32, L = 2, V = 2, A = 2 ,I=2   ;
+
+  logic clear_pipes_o;
+
+
   logic RST_pipe_if_id, RST_pipe_id_ex, RST_pipe_ex_mem, RST_pipe_mem_wb;
 
-//assign RST_pipe_if_id = RST;
-  assign RST_pipe_if_id = RST||clear_pipes_o;
-  assign RST_pipe_id_ex = RST||clear_pipes_o;
-  assign RST_pipe_ex_mem= RST;
-  assign RST_pipe_mem_wb= RST;
+  //assign RST_pipe_if_id = RST;
+  assign RST_pipe_if_id  = RST || clear_pipes_o;
+  assign RST_pipe_id_ex  = RST || clear_pipes_o;
+  assign RST_pipe_ex_mem = RST;
+  assign RST_pipe_mem_wb = RST;
 
   //FETCH
   logic RST_pc;
@@ -32,7 +36,9 @@ module CPU (
   logic [31:0] RD1_if;
   logic [31:0] RD2_if;
 
-
+  logic reset_int_mem;
+  logic CLK_ng;
+  assign CLK_ng = !CLK;
 
   //DECODE
   // register file
@@ -45,14 +51,23 @@ module CPU (
 
 
   //EXECUTE
-  logic[1:0] ALU_flags_EX;
+  logic [1:0] ALU_flags_EX;
+  logic [N-1:0] Scalar_i_EX;
+  logic [4-1:0][N-1:0] Vec_A_o_EX;
+  logic [4-1:0][N-1:0] Vec_B_o_EX;
+  integer counter_EX;
+
+  logic [4-1:0][N-1:0] vector_i_EX;
+  logic [V-1:0][N-1:0] vector_o_EX;
+  logic [N-1:0] alumux_result;
+  logic fork_ready,ready_o_EX;
+
 
   //MEM
 
 
   //WriteBack
   logic RFWE_WB;
-  logic [4:0] A3_WB;
   logic [N-1:0] WD3_SCA_WB;
   logic [I-1:0][L-1:0] WD3_VEC_WB;
 
@@ -60,6 +75,10 @@ module CPU (
 
 
   //   PIPES
+
+  logic enable_ID_EX, enable_EX_MEM;
+
+
   logic [N-1:0] instruction_IF, instruction_ID;
 
 
@@ -82,7 +101,7 @@ module CPU (
 
   logic [N-1:0] RD1_S_MEM, RD2_S_MEM, AluResult_S_MEM;
   logic RegFile_WE_MEM, MemWE_MEM, WBSelect_MEM, OpSource_MEM;
-  logic [3:0] A3_MEM;
+  logic [4:0] A3_MEM;
   logic [1:0] OpType_MEM;
   logic [V-1:0][L-1:0] RD1_V_MEM, RD2_V_MEM, AluResult_V_MEM;
   logic [N-1:0] Data_Mem_S_MEM, Data_Result_S_MEM;
@@ -91,7 +110,7 @@ module CPU (
 
   logic [N-1:0] Data_Mem_S_WB, Data_Result_S_WB;
   logic RegFile_WE_WB, WBSelect_WB;
-  logic [3:0] A3_WB;
+  logic [4:0] A3_WB;
   logic [1:0] OpType_WB;
   logic [V-1:0][L-1:0] Data_Mem_V_WB, Data_Result_V_WB;
 
@@ -220,11 +239,11 @@ module CPU (
   //#############################    FETCH   ####################################
 
   assign PC_1 = pc_o + 1;
-  assign PC_label = pc_o + Extend_ex;
+  assign PC_label = pc_o + Extend_EX;
   //mux pc
   assign pc_i = (pc_select) ? (PC_label) : (PC_1);
 
-  PC_controller pc_controller (//OJO CON LAS SEÑALES
+  PC_controller pc_controller (  //OJO CON LAS SEÑALES
       .branchselect_id_i(BranchSelect_ID),
       .branchselect_ex_i(BranchSelect_EX),
       .ALU_flags_i(ALU_flags_EX),
@@ -242,9 +261,12 @@ module CPU (
       .Data_Out(pc_o)
   );
 
-  assign instruction_IF = inst_mem_data_i;
-  assign inst_mem_address_o = pc_o;
-  assign RST_pc = RST;
+  Inst_ROM instruction_ROM (
+    .address(pc_o[11:0]),
+    .clock(CLK_ng),
+    .q(instruction_IF)
+);
+
 
 
 
@@ -303,6 +325,85 @@ module CPU (
 
   //#############################  EXECUTE   ####################################
 
+  ForkVector #(
+      .N(N),
+      .V(V)
+  ) forkVector (
+      .CLK(CLK),
+      .RST(RST),
+      .OpType(OpType_EX),
+      .RD1_VEC_i(RD1_V_EX),
+      .RD2_VEC_i(RD2_V_EX),
+      .Scalar_i(Scalar_i_EX),
+      .Vec_A_o(Vec_A_o_EX),
+      .Vec_B_o(Vec_B_o_EX),
+      .counter(counter_EX)
+  );
+
+  ALU #(
+      .N(N)
+  ) alu0 (
+      .A(Vec_A_o_EX[0]),
+      .B(Vec_B_o_EX[0]),
+      .ALUControl(ALUControl_EX),
+      .ALUResult(vector_i_EX[0]),
+      .ALUFlags()
+  );
+
+  ALU #(
+      .N(N)
+  ) alu1 (
+      .A(Vec_A_o_EX[1]),
+      .B(Vec_B_o_EX[1]),
+      .ALUControl(ALUControl_EX),
+      .ALUResult(vector_i_EX[1]),
+      .ALUFlags()
+  );
+
+  ALU #(
+      .N(N)
+  ) alu2 (
+      .A(Vec_A_o_EX[2]),
+      .B(Vec_B_o_EX[2]),
+      .ALUControl(ALUControl_EX),
+      .ALUResult(vector_i_EX[2]),
+      .ALUFlags()
+  );
+
+  ALU #(
+      .N(N)
+  ) alu3 (
+      .A(Vec_A_o_EX[3]),
+      .B(Vec_B_o_EX[3]),
+      .ALUControl(ALUControl_EX),
+      .ALUResult(vector_i_EX[3]),
+      .ALUFlags()
+  );
+  assign alumux_result = (ALUSource_EX) ? Extend_EX : RD2_S_EX;
+
+  ALU #(
+      .N(N)
+  ) aluScalar (
+      .A(RD1_S_EX),
+      .B(alumux_result),
+      .ALUControl(ALUControl_EX),
+      .ALUResult(AluResult_S_EX),
+      .ALUFlags(ALUFlags_EX)
+  );
+
+  Execute_Stage_ready #(
+      .N(N)
+  ) u_Execute_Stage_ready (
+      .OpType_i(OpType_EX),
+      .fork_ready_i(fork_ready),
+      .ready_o(ready_o_EX)
+  );
+
+  assign enable_EX_MEM = ready_o_EX;
+
+
+
+
 
   //#############################    MEM     ####################################
   assign Data_Mem_S_MEM[N-1:8] = 0;
@@ -331,7 +432,7 @@ module CPU (
 
 
   //############################# WriteBack  ####################################
-  assign WD3_SCA_WB = WBSelect_WB ? Data_Result_S_WB:Data_Mem_S_WB;
-  assign WD3_VEC_WB = WBSelect_WB ? Data_Result_V_WB:Data_Mem_V_WB;
+  assign WD3_SCA_WB = WBSelect_WB ? Data_Result_S_WB : Data_Mem_S_WB;
+  assign WD3_VEC_WB = WBSelect_WB ? Data_Result_V_WB : Data_Mem_V_WB;
 
 endmodule  //CPU

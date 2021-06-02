@@ -1,5 +1,5 @@
 `timescale 1 ps / 1 ps
-module Memory_stage_tb ();
+module Stage_Memory_tb ();
   parameter N = 32, L = 8, A = 32, V = 20, I = 20;
 
 
