@@ -1,4 +1,4 @@
-module Execute_Stage_tb ();
+module Stage_Execute_tb ();
 parameter N = 32, V=20;
 logic CLK;
 logic RST;
@@ -11,7 +11,6 @@ logic [4-1:0][N-1:0] Vec_B_o;
 integer counter;
 
 logic [1:0] ALUControl, ALUFlags;
-
 
 logic 	[4-1:0][N-1:0] vector_i;
 logic 	[V-1:0][N-1:0] vector_o;

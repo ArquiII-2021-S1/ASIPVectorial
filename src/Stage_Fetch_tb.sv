@@ -1,5 +1,5 @@
 `timescale 1 ps / 1 ps
-module Stage_if_ROM_tb ();
+module Stage_Fetch_tb ();
 
 
   parameter N = 32;

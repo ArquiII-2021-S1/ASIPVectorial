@@ -1,4 +1,4 @@
-module Writeback_tb();
+module Stage_Writeback_tb();
 
 	parameter N = 32, L = 8, V = 20, I = 20;	
 

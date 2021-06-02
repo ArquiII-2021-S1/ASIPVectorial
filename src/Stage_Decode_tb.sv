@@ -1,4 +1,4 @@
-module Decode_Stage_tb ();
+module Stage_Decode_tb ();
 
   parameter N = 32, L = 8, I = 20, V = 20;
 
