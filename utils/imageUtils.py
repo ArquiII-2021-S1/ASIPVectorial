@@ -15,7 +15,8 @@ def getDicFrom(filename):
     with open(filename, "r") as fileInput:
         for line in fileInput:
             [address,value] = line.split(':')
-            dic[int(address)]=int(value)
+            if(int(address) not in dic.keys()):
+                dic[int(address)]=int(value)
     return dic
 
 def getPixelArrayFromDumpFile(filename):
@@ -147,6 +148,7 @@ def createImage( channelRed, channelGreen, channelBlue, width, height):
             index = index +1
     image = Image.fromarray(data,"RGB")
     image.show()
+    image.save("result.png")
 
 def extractPixelArray(filename):
     array = getImagePixels(filename)
