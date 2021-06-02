@@ -7,8 +7,6 @@ module Stage_if_ROM_tb ();
   //logic [31:0] instruction_if,instruction_id;
 
 
-
-
   logic RST_pc, WE_pc;
   logic [31:0] instruction_if, instruction_id;
   logic [31:0] pc_i, pc_o;
@@ -44,7 +42,6 @@ module Stage_if_ROM_tb ();
   //							.data_o(instruction_if), 
   //							.ByteMode_i(zero));
 
-
   Inst_ROM instrction_ROM (
       .address(pc_o[11:0]),
       .clock(CLK_ng),
@@ -79,21 +76,14 @@ module Stage_if_ROM_tb ();
 
   initial begin
     CLK             = 0;
-    //reset_int_mem=1;
-    //#20;
-    //reset_int_mem=0;
-    //#20;
-
 
     branchselect_id = 2'b00;
     branchselect_ex = 2'b00;
     ALU_flags_ex    = 2'b00;
     Extend_ex       = 12;
 
-
     wait(CLK == 1);
     wait(CLK == 0);
-
 
     WE_pc = 1;
     Extend_ex = 12;
@@ -104,8 +94,6 @@ module Stage_if_ROM_tb ();
     wait(CLK == 1);
     assert (instruction_id == 0)
     else $error("ERROR: instruccion leida:%0d", instruction_id);
-
-
 
     #1000 $finish;
 

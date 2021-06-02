@@ -98,8 +98,6 @@ module Stage_if_tb ();
     assert (instruction_id == 0)
     else $error("ERROR: instruccion leida:%0d", instruction_id);
 
-
-
     #1000 $finish;
 
   end
