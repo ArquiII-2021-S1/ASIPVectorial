@@ -13,9 +13,9 @@ module CPU (
   output logic [31:0] data_mem_in_data_o, data_mem_address_o, inst_mem_address_o;
   output logic data_mem_WE_o;
 
-  parameter N = 32, L = 8, V = 20, A = 32 ,I=20   ;
+  parameter N = 32, L = 8, V = 20, A = 32, I = 20;
 
-    logic enable=1;
+  logic enable = 1;
 
 
   logic clear_pipes_o;
@@ -45,8 +45,8 @@ module CPU (
 
   //DECODE
   // register file
-  logic [3:0] OpCode_ID;
-  logic [1:0] ExtendSelect;
+  logic [ 3:0] OpCode_ID;
+  logic [ 1:0] ExtendSelect;
   logic [12:0] imm_ID;
   logic [4:0] A1_ID, A2_ID;
   // control unit
@@ -63,10 +63,12 @@ module CPU (
   logic [4-1:0][L-1:0] vector_i_EX;
   logic [V-1:0][L-1:0] vector_o_EX;
   logic [N-1:0] alumux_result;
-  logic fork_ready,ready_o_EX;
+  logic fork_ready, ready_o_EX;
   logic [1:0] ALUFlags_EX;
 
   //MEM
+
+  logic temp_mem_finish;
   logic MEM_ready;
   logic [L-1:0] MEM_data_out;
   logic RST_memStage;
@@ -82,7 +84,7 @@ module CPU (
 
   //   PIPES
 
-  logic enable_ID_EX, enable_EX_MEM;
+  logic enable_ID_EX, enable_EX_MEM, enable_MEM_WB;
 
 
   logic [N-1:0] instruction_IF, instruction_ID;
@@ -133,7 +135,7 @@ module CPU (
       .instruction_i(instruction_IF),
       .instruction_o(instruction_ID)
   );
-assign enable_ID_EX = enable;
+  assign enable_ID_EX = enable;
   Pipe_ID_EX #(
       .N(N),
       .V(V),
@@ -184,7 +186,7 @@ assign enable_ID_EX = enable;
   ) u_Pipe_EX_MEM (
       .CLK     (CLK),
       .RST     (RST),
-      .enable_i(enable_EX_MEM),
+      .enable_i(Finished_ID),
 
       .RD1_S_i      (RD1_S_EX),
       .RD2_S_i      (RD2_S_EX),
@@ -221,7 +223,7 @@ assign enable_ID_EX = enable;
   ) u_Pipe_MEM_WB (
       .CLK     (CLK),
       .RST     (RST),
-      .enable_i(enable_i),
+      .enable_i(Finished_ID),  //conectar enable
 
       .Data_Mem_S_i   (Data_Mem_S_MEM),
       .Data_Result_S_i(Data_Result_S_MEM),
@@ -268,10 +270,10 @@ assign enable_ID_EX = enable;
   );
 
   Inst_ROM instruction_ROM (
-    .address(pc_o[11:0]),
-    .clock(CLK_ng),
-    .q(instruction_IF)
-);
+      .address(pc_o[11:0]),
+      .clock(CLK_ng),
+      .q(instruction_IF)
+  );
 
 
 
@@ -293,7 +295,7 @@ assign enable_ID_EX = enable;
       .clk(CLK),
       .rst(RST),
 
-      .WE     (RFWE_WB),
+      .WE     (RegFile_WE_WB),
       .A1     (A1_ID),
       .A2     (A2_ID),
       .A3_WB  (A3_WB),
@@ -307,7 +309,7 @@ assign enable_ID_EX = enable;
 
   Control_Unit u_Control_Unit (
       .OpCode_i      (OpCode_ID),
-      .Mem_Finished_i(Mem_Finished_MEM),
+      .Mem_Finished_i(temp_mem_finish),
       .Exe_Finished_i(Exe_Finished_EXE),
       .RegFileWE_o   (RegFile_WE_ID),
       .ExtendSelect_o(ExtendSelect_ID),
@@ -407,11 +409,11 @@ assign enable_ID_EX = enable;
       .ready_o(ready_o_EX)
   );
 
-  assign enable_EX_MEM = ready_o_EX;
+  assign Exe_Finished_EXE = ready_o_EX;
 
 
 
-
+  //   assign RST_memStage = MEM_ready
 
   //#############################    MEM     ####################################
   assign Data_Mem_S_MEM[N-1:8] = 0;
@@ -422,9 +424,9 @@ assign enable_ID_EX = enable;
       .A(A)
   ) u_MemStage (
       .clk(CLK),
-      .rst(RST_memStage),
+      .rst(Finished_ID),
 
-      .op_type      (OpType_MEM[1]),
+      .op_type      (OpType_MEM),
       .op_source    (OpSource_MEM),
       .write_enable (MemWE_MEM),
       .address      (RD1_S_MEM),
@@ -435,12 +437,12 @@ assign enable_ID_EX = enable;
       .vector_output(Data_Mem_V_MEM),
       .scalar_output(Data_Mem_S_MEM[7:0]),
       .mem_data     (MEM_data_out),  //para guardar el resultado a un txt
-      .mem_finished (MEM_ready)  // ready
+      .mem_finished (Mem_Finished_MEM)  // ready
   );
-
+assign temp_mem_finish = Mem_Finished_MEM||(~WBSelect_MEM);
 
   //############################# WriteBack  ####################################
-  assign WD3_SCA_WB = WBSelect_WB ? Data_Result_S_WB : Data_Mem_S_WB;
-  assign WD3_VEC_WB = WBSelect_WB ? Data_Result_V_WB : Data_Mem_V_WB;
+  assign WD3_SCA_WB = WBSelect_WB ? Data_Mem_S_WB : Data_Result_S_WB;
+  assign WD3_VEC_WB = WBSelect_WB ? Data_Mem_V_WB : Data_Result_V_WB;
 
 endmodule  //CPU

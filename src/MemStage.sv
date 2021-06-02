@@ -37,7 +37,9 @@ module MemStage (
   parameter A = 32;  // Address length
 
   /* Input signals */
-  input logic clk, rst, op_type, op_source, write_enable;
+//   input logic clk, rst, op_type, op_source, write_enable;
+  input logic clk, rst, op_source, write_enable;
+  input logic  [1:0]op_type;
   input logic [A-1:0] address;
   input logic [I-1:0][L-1:0] aluResultV, rd2_vec;
   input logic [L-1:0] aluResultS, rd2_sca;
@@ -92,7 +94,7 @@ module MemStage (
   ) wrModule (
       .clk(clk),
       .rst(rst),
-      .op_type(op_type),
+      .op_type(op_type[1]),
       .vector_data(wrSourceVec),
       .scalar_data(wrSourceSca),
       .base_address(address),
@@ -109,7 +111,7 @@ DataMemoryManager
 u_DataMemoryManager (
       .address_i(mem_address),
       .data_i   (write_data),
-      .CLK      (CLK),
+      .CLK      (clk),
       .wren_i   (wrEnable),
       .button_i (),
       .data_o   (),
@@ -135,7 +137,7 @@ u_DataMemoryManager (
   ) readModule (
       .clk(clk),
       .rst(rst),
-      .op_type(op_type),
+      .op_type(op_type[1]),
       .base_address(address),
       .read_data(read_data),
       .read_address(read_address),
@@ -148,6 +150,7 @@ u_DataMemoryManager (
 
   // Finish read/write signal
   assign mem_finished = (~write_enable && rdFinished) || (write_enable && wrFinished);
+//   || (op_type == 2'b00)
 
   // Output data from the memory
   assign mem_data = read_data;
