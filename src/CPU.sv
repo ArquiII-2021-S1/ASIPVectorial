@@ -131,6 +131,7 @@ module CPU (
   ) u_Pipe_IF_ID (
       .CLK(CLK),
       .RST(RST),
+      .enable_i(Finished_ID),
 
       .instruction_i(instruction_IF),
       .instruction_o(instruction_ID)
@@ -143,7 +144,7 @@ module CPU (
   ) u_Pipe_ID_EX (
       .CLK     (CLK),
       .RST     (RST),
-      .enable_i(enable_ID_EX),
+      .enable_i(Finished_ID),
 
       .RD1_S_i       (RD1_S_ID),
       .RD2_S_i       (RD2_S_ID),
@@ -264,7 +265,8 @@ module CPU (
   ) PC (
       .CLK(CLK),
       .RST(RST_pc),
-      .EN(WE_pc),
+    //   .EN(WE_pc),
+      .EN(Finished_ID),
       .Data_In(pc_i),
       .Data_Out(pc_o)
   );
@@ -280,9 +282,9 @@ module CPU (
 
   //#############################   DECODE   ####################################
   assign OpCode_ID = instruction_ID[31:28];
+  assign A3_ID = instruction_ID[27:23];
   assign A1_ID = instruction_ID[22:18];
   assign A2_ID = instruction_ID[17:13];
-  assign A3_ID = instruction_ID[27:23];
   assign imm_ID = instruction_ID[12:0];
 
 
