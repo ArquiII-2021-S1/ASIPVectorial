@@ -3,6 +3,7 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 import sys, getopt
+import datetime
 
 from numpy.lib.arraysetops import unique
 from numpy.lib.function_base import append
@@ -148,7 +149,8 @@ def createImage( channelRed, channelGreen, channelBlue, width, height):
             index = index +1
     image = Image.fromarray(data,"RGB")
     image.show()
-    image.save("result.png")
+    x = datetime.datetime.now()
+    image.save(x.strftime("%c")+".png")
 
 def extractPixelArray(filename):
     array = getImagePixels(filename)
