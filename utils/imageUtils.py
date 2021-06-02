@@ -9,6 +9,14 @@ from numpy.lib.arraysetops import unique
 
 ################################################## Populate ROM ################################################## 
 # Obtiene un arreglo de datos dado un archivo de entrada.
+def getDicFrom(filename):
+    dic = {}
+    with open(filename, "r") as fileInput:
+        for line in fileInput:
+            [address,value] = line.split(':')
+            dic[address]=int(value)
+    return dic
+
 def getPixelArrayFromDumpFile(filename):
     with open(filename, "r") as fileInput:
         lines = []
@@ -153,24 +161,22 @@ def extractPixelArray(filename):
 
 # g generate ROM files
 def main(argv):
-    opts, args = getopt.getopt(argv, "g:s:d:", ["generate", "show" , "debug"])
+    opts, args = getopt.getopt(argv, "g:s:h:", ["generate", "show" , "help"])
     for opt, arg in opts:
         if opt in ("-g", "--generate"):
             populateROM(arg,"./output/rom1.mif","./output/rom2.mif")
         elif opt in ("-s", "--show"):
-            channelRed = getPixelArrayFromDumpFile(arg)
-            channelGreen = getPixelArrayFromDumpFile(arg)
-            channelBlue = getPixelArrayFromDumpFile(arg)
+            dic = getDicFrom(arg)
+            values = dic.values()
+            channelRed = values[0:39999]
+            channelGreen = values[40000:79999]
+            channelBlue = values[80000:119999]
             createImage(channelRed, channelGreen, channelBlue, 200, 200)
-
-        elif opt in ("-d", "--debug"):
-            print(arg)
-
-
+        elif opt in ("-h", "--help"):
+            print("python3 imageUtils.py -g \"./input/test.png\"")
+            print("python3 imageUtils.py -d \"./input/test-dump.txt\"")
 if __name__ == "__main__":
    main(sys.argv[1:])
 
 
-#populateROM("./input/test.png","./output/rom1.mif","./output/rom2.mif")
-#extractPixelArray("./input/test.png")
 
