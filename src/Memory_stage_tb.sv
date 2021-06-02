@@ -165,7 +165,6 @@ module Memory_stage_tb ();
       RD2_V_EX = 0;
       AluResult_V_EX = 0;
       wait(CLK == 1);
-      // enable_i = 0;
       RST_memStage=1;
       #10;
       RST_memStage=0;
