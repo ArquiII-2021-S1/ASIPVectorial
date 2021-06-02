@@ -15,7 +15,7 @@ def getDicFrom(filename):
     with open(filename, "r") as fileInput:
         for line in fileInput:
             [address,value] = line.split(':')
-            if(int(address) not in dic.keys()):
+            if((int(address) not in dic.keys()) & (int(value) != 0)  ):
                 dic[int(address)]=int(value)
     return dic
 
@@ -183,7 +183,6 @@ def main(argv):
             channelRed = pixels[131100:171100]
             channelGreen = pixels[171100:211100]
             channelBlue = pixels[211100:251100]
-
 
             print(len(channelRed),len(channelGreen), len(channelBlue))
             createImage(channelRed, channelGreen, channelBlue, 200, 200)
