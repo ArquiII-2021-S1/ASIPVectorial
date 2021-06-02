@@ -43,6 +43,8 @@ module CPU (
   logic CLK_ng;
   assign CLK_ng = !CLK;
 
+
+
   //DECODE
   // register file
   logic [ 3:0] OpCode_ID;
@@ -65,6 +67,9 @@ module CPU (
   logic [N-1:0] alumux_result;
   logic fork_ready, ready_o_EX;
   logic [1:0] ALUFlags_EX;
+
+
+  logic [1:0] branchEQ_result_EX;
 
   //MEM
 
@@ -130,7 +135,7 @@ module CPU (
       .N(N)
   ) u_Pipe_IF_ID (
       .CLK(CLK),
-      .RST(RST),
+      .RST(RST_pipe_if_id),
       .enable_i(Finished_ID),
 
       .instruction_i(instruction_IF),
@@ -143,7 +148,7 @@ module CPU (
       .L(L)
   ) u_Pipe_ID_EX (
       .CLK     (CLK),
-      .RST     (RST),
+      .RST     (RST_pipe_id_ex),
       .enable_i(Finished_ID),
 
       .RD1_S_i       (RD1_S_ID),
@@ -255,7 +260,7 @@ module CPU (
   PC_controller pc_controller (  //OJO CON LAS SEÑALES
       .branchselect_id_i(BranchSelect_ID),
       .branchselect_ex_i(BranchSelect_EX),
-      .ALU_flags_i(ALU_flags_EX),
+      .ALU_flags_i(branchEQ_result_EX),
       .pc_select_o(pc_select),
       .clear_pipes_o(clear_pipes_o)
   );
@@ -332,8 +337,8 @@ module CPU (
       .ExtImm_OUT  (Extend_ID)
   );
 
-
   //#############################  EXECUTE   ####################################
+  assign branchEQ_result_EX = {RD1_S_EX==RD2_S_EX,1'b0}; 
 
   ForkVector #(
       .N(N),

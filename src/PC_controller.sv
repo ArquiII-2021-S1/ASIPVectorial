@@ -12,7 +12,7 @@ output logic pc_select_o,clear_pipes_o;
 //					branchselect_ex_i == 10 AND flag zero
 //					branchselect_ex_i == 11 AND flag negative
 
-logic zero, negative;
+// logic zero, negative;
 assign zero = ALU_flags_i[1];
 assign negative = ALU_flags_i[0];
 assign pc_select_o = ((branchselect_ex_i===2'b01) || (branchselect_ex_i===2'b10 && zero)  ||  (branchselect_ex_i===2'b11 && negative) )? (1):(0);
