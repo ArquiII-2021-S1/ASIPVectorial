@@ -48,7 +48,6 @@ module MemStage (
   output logic [I-1:0][L-1:0] vector_output;
   output logic [L-1:0] scalar_output, mem_data;
   output logic mem_finished;
-
   /* ----------------------------------------------------------------------- */
 
   /* WriteModule signals */

@@ -441,6 +441,10 @@ module CPU (
   );
 assign temp_mem_finish = Mem_Finished_MEM||(~WBSelect_MEM);
 
+
+assign Data_Result_S_MEM=(OpSource_MEM)? AluResult_S_MEM:RD2_S_MEM;
+assign Data_Result_V_MEM=(OpSource_MEM)? AluResult_V_MEM:RD2_V_MEM;
+
   //############################# WriteBack  ####################################
   assign WD3_SCA_WB = WBSelect_WB ? Data_Mem_S_WB : Data_Result_S_WB;
   assign WD3_VEC_WB = WBSelect_WB ? Data_Mem_V_WB : Data_Result_V_WB;

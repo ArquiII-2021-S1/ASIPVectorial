@@ -84,7 +84,7 @@ module Pipe_ID_EX #(
         OpType_o       <= OpType_i;
         RegFile_WE_o   <= RegFile_WE_i;
         ALUSource_o    <= ALUSource_i;
-        OpSource_o     <= OpSource_o;
+        OpSource_o     <= OpSource_i;
         Extend_o       <= Extend_i;
         A3_o           <= A3_i;
         BranchSelect_o <= BranchSelect_i;
