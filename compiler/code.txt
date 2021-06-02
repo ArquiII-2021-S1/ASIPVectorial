@@ -7,18 +7,17 @@ SUMEI   RE7 RE0 200     # Loop limit
 
 
 iterate_channels
-SUMEI   RE15 RE0 4      # k max value
+SUMEI   RE15 RE0 3      # k max value
 SUMEI   RE10 RE0 0      # j start value
 SUMEI   RE11 RE0 0      # i start value
 SUMEI   RE6 RE0 0
 SEQ     RE9 RE15 end_process
 SUMEI   RE14 RE0 1      # green channel
-SUMEI   RE15 RE0 2      # blue channel
 NOP
 
 SEQ     RE9 RE0  process_red
 SEQ     RE9 RE14 process_green
-SEQ     RE9 RE15 process_blue
+SAL     RE9 RE15 process_blue
 
 
 
@@ -276,6 +275,7 @@ SAL select_filter
 hor_iterate_colums
 SEQ     RE10 RE7 hor_end_iterate_colums
 SUMEI   RE11 RE0 0      # i start value
+NOP
 SUMEE   RE15 RE3 RE10   # RE15 = mask_start_address + j
 SUMEE   RE6 RE1 RE10    # store_address = store_start_address + j
 SUMEE   RE8 RE5 RE10    # row_start_address = row_start_address + j
@@ -304,13 +304,14 @@ NOP
 SAL     hor_iterate_colums
 
 
+
+
 ver_end_iterate_rows
 hor_end_iterate_colums
 SUMEI   RE9 RE9 1       # k = k + 1
 NOP
 NOP
 SAL  iterate_channels
-
 
 
 
@@ -352,6 +353,27 @@ SUMEI   RE11 RE11 1     # i = i + 1
 NOP
 SUMEE   RE5 RE5 RE15    # row_start_address = row_start_address + 200
 SAL     ver_iterate_rows
+
+
+
+
+dia_iterate_colums
+
+SEQ     RE9 RE0 hor_iterate_colums
+SUMEI   RE15 RE0 1
+NOP
+NOP
+SEQ     RE9 RE15 ver_iterate_rows_aux     
+NOP
+NOP
+
+
+SUMEI   RE3 RE0 7575    # Building zero mask address
+SUMEI   RE14 RE0 4
+NOP
+NOP
+SLE     RE3 RE3 RE14    # Zero mask start address
+SAL     hor_iterate_colums
 
 
 
@@ -429,7 +451,5 @@ SAL     hor_continue_iterate_rows
 
 
 
-end_horizontal
 end_process
-dia_iterate_colums
 NOP
