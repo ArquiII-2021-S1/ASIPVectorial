@@ -167,10 +167,13 @@ def main(argv):
             populateROM(arg,"./output/rom1.mif","./output/rom2.mif")
         elif opt in ("-s", "--show"):
             dic = getDicFrom(arg)
-            values = dic.values()
-            channelRed = values[0:39999]
-            channelGreen = values[40000:79999]
-            channelBlue = values[80000:119999]
+            
+            values = list(dic.values()) + list(np.zeros((91,), dtype=int))
+            print(len(values))
+            channelRed = values[0:40000]
+            channelGreen = values[40000:80000]
+            channelBlue = values[80000:120000]
+            print(len(channelRed),len(channelGreen), len(channelBlue))
             createImage(channelRed, channelGreen, channelBlue, 200, 200)
         elif opt in ("-h", "--help"):
             print("python3 imageUtils.py -g \"./input/test.png\"")
