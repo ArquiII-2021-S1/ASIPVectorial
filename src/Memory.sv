@@ -28,8 +28,8 @@ module Memory(clk,
     logic [L-1:0] rom_data;
     
     ROM rom(
-        .address(address), 
-        // .address(address[15:0]), //OJO CON ESTO EN MODELSIM
+        // .address(address), 
+        .address(address[15:0]), //OJO CON ESTO EN MODELSIM
         .clock(clk),
     .q(rom_data)
     );

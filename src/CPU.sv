@@ -13,7 +13,7 @@ module CPU (
   output logic [31:0] data_mem_in_data_o, data_mem_address_o, inst_mem_address_o;
   output logic data_mem_WE_o;
 
-  parameter N = 32, L = 2, V = 2, A = 2 ,I=2   ;
+  parameter N = 32, L = 8, V = 20, A = 32 ,I=20   ;
 
   logic clear_pipes_o;
 
@@ -53,17 +53,20 @@ module CPU (
   //EXECUTE
   logic [1:0] ALU_flags_EX;
   logic [N-1:0] Scalar_i_EX;
-  logic [4-1:0][N-1:0] Vec_A_o_EX;
-  logic [4-1:0][N-1:0] Vec_B_o_EX;
+  logic [4-1:0][L-1:0] Vec_A_o_EX;
+  logic [4-1:0][L-1:0] Vec_B_o_EX;
   integer counter_EX;
 
-  logic [4-1:0][N-1:0] vector_i_EX;
-  logic [V-1:0][N-1:0] vector_o_EX;
+  logic [4-1:0][L-1:0] vector_i_EX;
+  logic [V-1:0][L-1:0] vector_o_EX;
   logic [N-1:0] alumux_result;
   logic fork_ready,ready_o_EX;
-
+  logic [1:0] ALUFlags_EX;
 
   //MEM
+  logic MEM_ready;
+  logic [L-1:0] MEM_data_out;
+  logic RST_memStage;
 
 
   //WriteBack
@@ -327,6 +330,7 @@ module CPU (
 
   ForkVector #(
       .N(N),
+      .L(L),
       .V(V)
   ) forkVector (
       .CLK(CLK),
@@ -337,11 +341,12 @@ module CPU (
       .Scalar_i(Scalar_i_EX),
       .Vec_A_o(Vec_A_o_EX),
       .Vec_B_o(Vec_B_o_EX),
-      .counter(counter_EX)
+      .counter(counter_EX),
+      .ready_o(fork_ready)
   );
 
   ALU #(
-      .N(N)
+      .N(L)
   ) alu0 (
       .A(Vec_A_o_EX[0]),
       .B(Vec_B_o_EX[0]),
@@ -351,7 +356,7 @@ module CPU (
   );
 
   ALU #(
-      .N(N)
+      .N(L)
   ) alu1 (
       .A(Vec_A_o_EX[1]),
       .B(Vec_B_o_EX[1]),
@@ -361,7 +366,7 @@ module CPU (
   );
 
   ALU #(
-      .N(N)
+      .N(L)
   ) alu2 (
       .A(Vec_A_o_EX[2]),
       .B(Vec_B_o_EX[2]),
@@ -371,7 +376,7 @@ module CPU (
   );
 
   ALU #(
-      .N(N)
+      .N(L)
   ) alu3 (
       .A(Vec_A_o_EX[3]),
       .B(Vec_B_o_EX[3]),

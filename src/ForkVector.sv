@@ -1,13 +1,15 @@
-module ForkVector #(parameter N = 32,
+module ForkVector #(parameter
+                    N=32,
+                     L = 8,
                     V = 20)
                    (input logic CLK,
                     input logic RST,
                     input logic[1:0] OpType,
-                    input logic 	[V-1:0][N-1:0] RD1_VEC_i,
-                    input logic 	[V-1:0][N-1:0] RD2_VEC_i,
+                    input logic 	[V-1:0][L-1:0] RD1_VEC_i,
+                    input logic 	[V-1:0][L-1:0] RD2_VEC_i,
                     input logic 	[N-1:0] Scalar_i,
-                    output logic 	[4-1:0][N-1:0] Vec_A_o,
-                    output logic 	[4-1:0][N-1:0] Vec_B_o,
+                    output logic 	[4-1:0][L-1:0] Vec_A_o,
+                    output logic 	[4-1:0][L-1:0] Vec_B_o,
                     output integer counter = 0,
                     output logic  ready_o);
     
