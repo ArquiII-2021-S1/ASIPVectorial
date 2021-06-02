@@ -180,11 +180,11 @@ def extractPixelArray(filename):
         channelRed.append(array[item][0]) # channel red
         channelGreen.append(array[item][1])  # channel green
         channelBlue.append(array[item][2]) # channel blue
-    createImage(channelRed, channelGreen, channelBlue, 200, 200)
+    createImage(channelRed, channelGreen, channelBlue, 7, 7)
 
 
 
 
 populateROM("./input/test.png", "./input/gradient.txt", "./input/customGradient.txt","./output/rom1.mif","./output/rom2.mif")
-extractPixelArray("./input/test.png")
+extractPixelArray("./input/btimap.png")
 
