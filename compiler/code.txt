@@ -76,7 +76,8 @@ SUMEI   RE15 RE15 47    # Alpha address
 NOP
 NOP
 CRGE    RE2 RE15        # Load alpha value
-
+NOP
+NOP
 
 
 
@@ -560,3 +561,4 @@ SAL     hor_continue_iterate_rows
 end_process
 NOP
 NOP
+SAL end_process
