@@ -341,16 +341,32 @@ module CPU (
       .V(V)
   ) forkVector (
       .CLK(CLK),
-      .RST(RST),
+      .RST(Finished_ID),
       .OpType(OpType_EX),
       .RD1_VEC_i(RD1_V_EX),
       .RD2_VEC_i(RD2_V_EX),
-      .Scalar_i(Scalar_i_EX),
+    //   .Scalar_i(Scalar_i_EX),
+      .Scalar_i(RD2_S_EX),
       .Vec_A_o(Vec_A_o_EX),
       .Vec_B_o(Vec_B_o_EX),
       .counter(counter_EX),
       .ready_o(fork_ready)
   );
+
+
+  JoinVector #(
+    .L(L),
+    .V(V)
+) joinVector (
+    .CLK(CLK),
+    .RST(RST),
+    .counter(counter_EX),
+    .vector_i(vector_i_EX),
+    .vector_o(AluResult_V_EX)
+);
+
+
+
 
   ALU #(
       .N(L)
