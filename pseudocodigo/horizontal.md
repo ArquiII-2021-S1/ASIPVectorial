@@ -5,7 +5,7 @@
 RE1 -> result start address
 RE2 -> alpha
 RE3 -> mask start address
-RE5 -> red channel start row address
+RE5 -> channel start row address
 ```
 
 ## Internal variables
