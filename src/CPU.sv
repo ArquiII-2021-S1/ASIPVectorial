@@ -15,6 +15,9 @@ module CPU (
 
   parameter N = 32, L = 8, V = 20, A = 32 ,I=20   ;
 
+    logic enable=1;
+
+
   logic clear_pipes_o;
 
 
@@ -130,7 +133,7 @@ module CPU (
       .instruction_i(instruction_IF),
       .instruction_o(instruction_ID)
   );
-
+assign enable_ID_EX = enable;
   Pipe_ID_EX #(
       .N(N),
       .V(V),
@@ -138,7 +141,7 @@ module CPU (
   ) u_Pipe_ID_EX (
       .CLK     (CLK),
       .RST     (RST),
-      .enable_i(enable_i),
+      .enable_i(enable_ID_EX),
 
       .RD1_S_i       (RD1_S_ID),
       .RD2_S_i       (RD2_S_ID),
@@ -181,7 +184,7 @@ module CPU (
   ) u_Pipe_EX_MEM (
       .CLK     (CLK),
       .RST     (RST),
-      .enable_i(enable_i),
+      .enable_i(enable_EX_MEM),
 
       .RD1_S_i      (RD1_S_EX),
       .RD2_S_i      (RD2_S_EX),
