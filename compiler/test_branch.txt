@@ -1,0 +1,21 @@
+SUMEI   RE1 RE0 0   
+SUMEI   RE2 RE0 20 
+hor_iterate_colums
+SUMEI   RE1 RE1 5   
+NOP
+NOP
+NOP
+NOP
+SEQ RE0 RE0 hor_iterate_colums
+NOP
+NOP
+NOP
+NOP
+SUMEI   RE10 RE10 20    # j = j + 20
+NOP
+NOP
+SAL     hor_iterate_colums
+NOP
+NOP
+end_code
+SUMEI   RE5 RE0 55
