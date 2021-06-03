@@ -7,9 +7,9 @@ module CPU_tb();
  logic [31:0] inst_mem_data,data_mem_out_data;
  logic [31:0] data_mem_in_data,data_mem_address,inst_mem_address;
  logic data_mem_WE;
- logic button=0;
-  logic [7:0] LEDs;
-  
+	logic [7:0] LEDs;
+	logic [10:0] buttons_i;
+
   
   
  logic CLK_ng;
@@ -21,7 +21,9 @@ module CPU_tb();
  
   logic [31:0] pos =0;
 CPU cpu (	
-							.CLK(CLK),.RST(RST), 
+							.CLK(CLK),
+							.RST(RST), 
+							.buttons_i(buttons_i),
 							.inst_mem_data_i(), 
 							.inst_mem_address_o(), 
 							.data_mem_out_data_i(), 

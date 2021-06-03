@@ -1,6 +1,7 @@
 module CPU (
     CLK,
     RST,
+    buttons_i,
     inst_mem_data_i,
     inst_mem_address_o,
     data_mem_out_data_i,
@@ -11,6 +12,10 @@ module CPU (
   input logic CLK, RST;
   input logic [31:0] inst_mem_data_i, data_mem_out_data_i;
   output logic [31:0] data_mem_in_data_o, data_mem_address_o, inst_mem_address_o;
+
+  input logic [10:0] buttons_i;
+
+
   output logic data_mem_WE_o;
 
   parameter N = 32, L = 8, V = 20, A = 32, I = 20;
@@ -448,7 +453,7 @@ module CPU (
   ) u_MemStage (
       .clk(CLK),
       .rst(Finished_ID),
-
+      .buttons_i(buttons_i),
       .op_type      (OpType_MEM),
       .op_source    (OpSource_MEM),
       .write_enable (MemWE_MEM),

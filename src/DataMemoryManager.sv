@@ -7,13 +7,14 @@ module DataMemoryManager #(
     CLK,
     data_i,
     wren_i,
-    button_i,
+    buttons_i,
     data_o,
     LEDs_o
 );
   input logic [A-1:0] address_i;
   input logic [L-1:0] data_i;
-  input logic CLK, wren_i, button_i;
+  input logic CLK, wren_i;
+  input logic [10:0] buttons_i;
   output logic [L-1:0] data_o;
   output logic [7:0] LEDs_o;
 
@@ -177,10 +178,24 @@ module DataMemoryManager #(
       .Data_Out(LEDs_o)
   );
 
+    always_comb begin
+        case ((address_i[3:0]))
+            4'b0000:  data_periferials = {7'b0, buttons_i[0]};
+            4'b0001:  data_periferials = {7'b0, buttons_i[1]};
+            4'b0010:  data_periferials = {7'b0, buttons_i[2]};
+            4'b0011:  data_periferials = {7'b0, buttons_i[3]};
+            4'b0100:  data_periferials = {7'b0, buttons_i[4]};
+            4'b0101:  data_periferials = {7'b0, buttons_i[5]};
+            4'b0110:  data_periferials = {7'b0, buttons_i[6]};
+            4'b0111:  data_periferials = {7'b0, buttons_i[7]};
+            4'b1000:  data_periferials = {7'b0, buttons_i[8]};
+            4'b1001:  data_periferials = {7'b0, buttons_i[9]};
+            4'b1010:  data_periferials = {7'b0, buttons_i[10]};
+        endcase
+    end
 
 
-
-  assign data_periferials = (address_i[0]) ? ({31'b0, button_i}) : ({24'b0, LEDs_o});
+ // assign data_periferials = (address_i[0]) ? ({31'b0, button_i}) : ({24'b0, LEDs_o});
 
   always_comb begin
     case (sel)

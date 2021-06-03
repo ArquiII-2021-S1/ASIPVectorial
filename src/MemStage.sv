@@ -1,6 +1,7 @@
 module MemStage (
     clk,
     rst,
+    buttons_i,
     op_type,
     op_source,
     address,
@@ -44,6 +45,7 @@ module MemStage (
   input logic [A-1:0] address;
   input logic [I-1:0][L-1:0] aluResultV, rd2_vec;
   input logic [L-1:0] aluResultS, rd2_sca;
+  input logic [10:0] buttons_i;
 
   /* Output signals */
   output logic [I-1:0][L-1:0] vector_output;
@@ -105,6 +107,9 @@ module MemStage (
       .finished(wrFinished)
   );
 
+
+
+
 DataMemoryManager 
 #(
     .L (8 ),
@@ -115,7 +120,7 @@ u_DataMemoryManager (
       .data_i   (write_data),
       .CLK      (clk),
       .wren_i   (wrEnable),
-      .button_i (),
+      .buttons_i (buttons_i),
       .data_o   (read_data),
       .LEDs_o   ()
   );

@@ -14,21 +14,21 @@ NOP
 SUMEI   RE15 RE15 44      # First button address
 NOP
 NOP
-SUMEI   RE14 RE0 1          # Red channel intensity
+SUMEI   RE14 RE0 2          # Red channel intensity
 NOP
 NOP
 ALME    RE15 RE14
 
 
 SUMEI   RE15 RE15 1      
-SUMEI   RE14 RE0 2          # Blue channel intensity
+SUMEI   RE14 RE0 0         # Green channel intensity  
 NOP
 NOP
 ALME    RE15 RE14
 
 
 SUMEI   RE15 RE15 1      
-SUMEI   RE14 RE0 0          # Green channel intensity
+SUMEI   RE14 RE0 1          # Blue channel intensity
 NOP
 NOP
 ALME    RE15 RE14
@@ -42,7 +42,7 @@ ALME    RE15 RE14
 
 
 SUMEI   RE15 RE15 1      
-SUMEI   RE14 RE0 1          # Filter type
+SUMEI   RE14 RE0 2          # Filter type
 NOP
 NOP
 ALME    RE15 RE14
