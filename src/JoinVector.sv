@@ -1,10 +1,10 @@
-module JoinVector #(parameter N = 32,
+module JoinVector #(parameter L = 8,
                     V = 20)
                    (input logic CLK,
                     input logic RST,
                     input integer counter,
-                    input logic 	[4-1:0][N-1:0] vector_i,
-                    output logic 	[V-1:0][N-1:0] vector_o);
+                    input logic 	[4-1:0][L-1:0] vector_i,
+                    output logic 	[V-1:0][L-1:0] vector_o);
     
     always @(negedge (CLK))begin
         vector_o[counter]    = vector_i[0];

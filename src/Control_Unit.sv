@@ -37,11 +37,11 @@ module Control_Unit (OpCode_i,
             4'b0010: OUT = 12'b100110001010;  //Branch equal
             4'b0011: OUT = 12'b001000100001;  //Load Scalar
             4'b0100: OUT = 12'b001001100001;  //Load Vector
-            4'b0101: OUT = 12'b000000100100;  //Store Scalar
-            4'b0110: OUT = 12'b000001100100;  //Store Vector
+            4'b0101: OUT = 12'b000000100101;  //Store Scalar
+            4'b0110: OUT = 12'b000001100101;  //Store Vector
             4'b0111: OUT = 12'b001001100010;  //Add Vector-Vector
             4'b1000: OUT = 12'b001001000010;  //Add Vector-Scalar
-            4'b1001: OUT = 12'b001110100010;  //Add Scalar-Immediate
+            4'b1001: OUT = 12'b001010100010;  //Add Scalar-Immediate
             4'b1010: OUT = 12'b001000100010;  //Add Scalar-Scalar
             4'b1011: OUT = 12'b001000101010;  //Substract Scalar-Scalar
             4'b1100: OUT = 12'b001001010010;  //Shift Right Vector-Scalar

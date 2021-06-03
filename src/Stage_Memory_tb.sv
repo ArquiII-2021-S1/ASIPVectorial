@@ -1,5 +1,5 @@
 `timescale 1 ps / 1 ps
-module Memory_stage_tb ();
+module Stage_Memory_tb ();
   parameter N = 32, L = 8, A = 32, V = 20, I = 20;
 
 
@@ -165,7 +165,6 @@ module Memory_stage_tb ();
       RD2_V_EX = 0;
       AluResult_V_EX = 0;
       wait(CLK == 1);
-      // enable_i = 0;
       RST_memStage=1;
       #10;
       RST_memStage=0;
